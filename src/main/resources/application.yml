@@ -1,0 +1,29 @@
+server:
+  port: 8082
+
+logging:
+  level:
+    org.springframework: DEBUG
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: ''
+    url: jdbc:mysql://localhost:3306/FYP
+    username: root
+    #driver-class-name: com.mysql.jdbc.Driver
+    #password: Tss@5811
+    #url: jdbc:mysql://fyp-r3s.mysql.database.azure.com:3306/FYP?useSSL=true
+    #username: tingss
+    #password: TSS990809135811
+    #url: jdbc:mysql://fyp.ck7kzhuuvclr.ap-southeast-2.rds.amazonaws.com:3306/FYP
+    #username: tingss
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        database: mysql
+        database-platform: org.hibernate.dialect.MySQL8Dialect
