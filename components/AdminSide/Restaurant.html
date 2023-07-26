@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>R3S Restaurant Information</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+        font-size: .875rem;
+      }
+      :root {
+        --colour1: #00B4D8;
+        --colour2: #00313b;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        background: var(--colour1);
+        /* rtl:raw:
+        right: 0;
+        */
+        bottom: 0;
+        /* rtl:remove */
+        left: 0;
+        z-index: 100; /* Behind the navbar */
+        padding: 48px 0 0; /* Height of navbar */
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+      }
+      .navbar {
+        justify-content: flex-start;
+      }
+      img {
+            width: 120px;
+            height: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+      @media (max-width: 1000px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+
+        .active {
+          border-radius: 10px 10px 10px 10px;
+        }
+      }
+
+      .sidebar-sticky {
+        position: relative;
+        top: 0;
+        height: calc(100vh - 48px);
+        padding-top: .5rem;
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+      }
+
+      .sidebar .nav-link {
+        font-weight: 500;
+        color: #333;
+      }
+
+      .sidebar .nav-link.active {
+        color: #2470dc;
+      }
+
+      .navbar .navbar-toggler {
+        right: 2.75rem;
+      }
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      .side1 {
+            width: 17.5%;
+      }
+	    .ex {
+          margin-left: 50px;
+          position: absolute;
+          right: 10px;
+          margin-top: auto;
+          margin-bottom: auto;
+      }
+      ul {
+        list-style-type: none;
+        margin-top: 5px;
+        padding: 0;
+      }
+      li a{
+          color: var(--colour2);
+          padding: 15px;
+          display: flex;
+          margin-left: 1.0rem;
+          font-size: 1.0rem;
+      }
+      ul li a.active {
+          background-color: white;
+          border-radius: 10px 0 0 10px;
+      }
+      .lia1 {
+          margin-right: 1.0rem;
+          line-height: 25px !important;
+      }
+      h1 {
+        left: 0;
+      }
+      .color {
+        color: var(--colour2);
+      }
+      .display1 {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+      }
+      .top2 {
+          margin-top: 25px;
+      }
+      .rightspace {
+          margin-right: 10px;
+      }
+    </style>
+</head>
+<body>
+    <header class="navbar navbar-white sticky-top bg-white p-0 shadow align-self-center">
+        <aside class="side1">
+            <a href="Dashboard.html"><img src="../../assets/R3S logo.png" alt="R3S"></a>
+        </aside>
+        <h1>Restaurant Information</h1>
+        <a href="../Logout.html" class="ex"  id="logoutButton" >
+            <span class="fas fa-sign-out-alt fa-2x color"></span>
+        </a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fas fa-bars"></span>
+        </button>
+    </header>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-blue sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="Dashboard.html">
+                    <span class="fas fa-chart-line lia1"></span>
+                    Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  active" href="Restaurant.html">
+                    <span class="fas fa-utensils lia1"></span>
+                        Restaurant
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Employee.html">
+                    <span class="far fa-user lia1"></span>
+                    Employee
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="ScheduleDaily.html">
+                    <span class="far fa-calendar lia1"></span>
+                    Schedule
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Account.html">
+                    <span class="far fa-user-circle lia1"></span>
+                    Account
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Import.html">
+                    <span class="fas fa-file-import lia1"></span>
+                    Import
+                    </a>
+                </li>
+                </ul>
+            </div>
+            </nav>
+        
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 top2">
+              <div id="alert-container"></div>
+              <div>
+                <table id="restaurant-table" class="display table table-striped" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>No.</th>
+                          <th>Restaurant Name</th>
+                          <th>Open Time</th>
+                          <th>Close Time</th>
+                          <th>Status</th>
+                          <th>Manager</th>
+                          <th>Edit</th>
+                          <th></th>
+                      </tr>
+                  </thead>
+              </div>
+
+              <!-- Delete Modal -->
+              <div class="modal fade" id="staticBackdropDeleteRestaurant" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Delete Restaurant(s)</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body" id="checkbox-count">
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" id="confirm_delete">Confirm</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+
+              <!-- Delete success Modal -->
+              <div class="modal fade" id="deleteSuccessModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Delete Successfully</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="delsuccess1"></button>
+                      </div>
+                      <div class="modal-body" id="checkbox-count1">
+                          The restaurant(s) has/have been deleted successfully!
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="delsuccess2">Close</button>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+
+              <!-- Delete fail Modal -->
+              <div class="modal fade" id="deleteErrorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Delete Failed</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body" id="checkbox-count2">
+                          Deletion of the restaurant(s) has/have failed!
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+
+              <!-- Edit Modal -->
+              <div class="modal fade" id="staticBackdropEditRestaurant" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Edit Restaurant</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="edit-form">
+                              <input class="form-control" type="hidden" name="restaurant_id" id="edit-resid">
+                            <div class="form-group">
+                              <label for="restaurant_name">Restaurant Name</label>
+                              <input class="form-control" type="text" name="restaurant_name" id="edit-resname">
+                            </div>
+                            <div class="form-group">
+                              <label for="restaurant_open">Open Time</label>
+                              <input class="form-control" type="time" name="restaurant_open" id="edit-resopen">
+                            </div>
+                            <div class="form-group">
+                              <label for="restaurant_close">Close Time</label>
+                              <input class="form-control" type="time" name="restaurant_close" id="edit-resclose">
+                            </div>
+                            <div class="form-group">
+                              <label for="restaurant_status">Status: </label>
+                              <div class="form-check form-switch">
+                                <input class="form-check-input mr-2" type="checkbox" name="restaurant_status" id="edit-resstatus">
+                                <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                              </div>
+                            </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" id="updateresbtn">Save</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+
+              <!-- update success Modal -->
+              <div class="modal fade" id="updatesuccessModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Edit Successfully</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="updatesuccess1"></button>
+                      </div>
+                      <div class="modal-body" id="checkbox-count1">
+                          The restaurant details has been edited successfully!
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="updatesuccess2">Close</button>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+              
+              <!-- update fail Modal -->
+              <div class="modal fade" id="updatefailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Update Failed</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="checkbox-count2">
+                        The restaurant details update failed!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+              </div>
+
+              <!-- Add Modal -->
+              <div class="modal fade" id="staticBackdropAddRestaurant" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Add New Restaurant</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form id="Addres-form">
+                          <div class="form-group">
+                            <label for="add_restaurant_name">Restaurant Name</label>
+                            <input class="form-control" type="text" name="add_restaurant_name" id="add-resname">
+                          </div>
+                          <div class="form-group">
+                            <label for="add_restaurant_open">Open Time</label>
+                            <input class="form-control" type="time" name="add_restaurant_open" id="add-resopen">
+                          </div>
+                          <div class="form-group">
+                            <label for="add_restaurant_close">Close Time</label>
+                            <input class="form-control" type="time" name="add_restaurant_close" id="add-resclose">
+                          </div>
+                          <div class="form-group">
+                            <label for="add_restaurant_status">Status: </label>
+                            <div class="form-check form-switch">
+                              <input class="form-check-input mr-2" type="checkbox" name="add_restaurant_status" id="add-resstatus">
+                              <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="account_email">Account Email:</label>
+                            <select class="form-control" name="account_email" id="account-email">
+                                <!-- Options will be dynamically populated -->
+                            </select>
+                        </div>
+                      </form>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" id="addnewres">Add</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+
+              <!-- add success Modal -->
+              <div class="modal fade" id="addsuccessModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add Successfully</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="addsuccess1"></button>
+                    </div>
+                    <div class="modal-body" id="checkbox-count1">
+                        The new restaurant details has been added successfully!
+                        *Please make sure you add the employees data of the new restaurant
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addsuccess2">Close</button>
+                    </div>
+                </div>
+                </div>
+              </div>
+            
+             <!--add fail Modal -->
+             <div class="modal fade" id="addfailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add New Restaurant Failed</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="checkbox-count2">
+                        The restaurant details was not successfully added!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function () {
+  var accountId;
+  $.ajax({
+        type: "GET",
+        url: "http://localhost:8082/get-session",
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(response) {
+            accountId = response;
+
+            // Use the retrieved session data as needed
+            console.log('Account ID:', accountId);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Failed to retrieve session data:', errorThrown);
+            window.location.href = '../index1.html';
+        }
+    });
+    
+
+    $('#logoutButton').click(function() {
+        // Send AJAX request to the backend logout endpoint
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8082/logout', // Replace with your actual backend logout endpoint URL
+            xhrFields: {
+                withCredentials: true // Include cookies in the request
+            },
+            success: function(response) {
+                window.location.href = '../Logout.html'; // Redirect to the logout.html page
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle error
+                alert('Logout failed: ' + jqXHR.responseText);
+            }
+        });
+    });
+  
+    var dataTable = $('#restaurant-table').DataTable({
+        serverSide: true,
+        processing: true,
+        order:[[0,'asc']],
+        ajax: {
+            url: 'http://localhost:8082/restaurant/restaurant-table',
+            type: 'GET',
+            //retrieve values of dataTable
+            data: function (d) {
+                d.page = $('#restaurant-table').DataTable().page.info().page;
+                d.size = $('#restaurant-table').DataTable().page.info().length;
+                d.sortColumn = $('#restaurant-table').DataTable().order()[0][0];
+                console.log(d.sortColumn)
+                if (d.sortColumn === 1) {
+                    d.sortColumn = 'restaurantName';
+                } else if (d.sortColumn === 5) {
+                    d.sortColumn = 'employeeName';
+                } else {
+                    d.sortColumn = 'restaurantId';
+                }
+                
+                d.sortDirection = $('#restaurant-table').DataTable().order()[0][1];
+                d["search"] = $('#restaurant-table_filter input').val();
+                d.status = $('#status-filter').val();
+                d.draw = $('#restaurant-table').DataTable().page.info().draw;
+            },
+            dataSrc: function (json) {
+                return json.restaurants;
+            },
+            dataType: "json"
+        },
+        columns: [
+            { data: 'restaurantId', searching: true, orderable: true},
+            { data: 'restaurantName', searching: true, orderable: true },
+            { data: 'openTime', orderable: false },
+            { data: 'closeTime', orderable: false },
+            { 
+              data: 'status', 
+              orderable: false,
+              render: function (data, type, row, meta) {
+                if (data === 'open') {
+                  return '<div class="form-check form-switch"><input class="form-check-input mr-2 statusupdate" type="checkbox" id="flexSwitchCheckDefault" checked><label class="form-check-label" for="flexSwitchCheckDefault"></label></div>';
+                } else if (data === 'maintenance') {
+                  return '<div class="form-check form-switch"><input class="form-check-input mr-2 statusupdate" type="checkbox" id="flexSwitchCheckDefault"><label class="form-check-label" for="flexSwitchCheckDefault"></label></div>';
+                } else {
+                  return data;
+                }
+              },
+            },
+            { data: 'employeeName', searching: true, orderable: true },
+            {
+              data: null,
+              orderable: false,
+              searchable: false,
+              render: function (data, type, row, meta) {
+                  return '<button type="button" class="btn btn-primary btn-sm editresrowbtn" data-bs-toggle="modal" data-bs-target="#staticBackdropEditRestaurant">Edit</button>';
+              },
+            },
+            {
+              data: null,
+              orderable: false,
+              searchable: false,
+              className: 'dt-center',
+              render: function (data, type, row, meta) {
+              return '<input type="checkbox" class="row-checkbox" value="' + row.id + '">';
+              },
+              title: '<input type="checkbox" id="select-all">'
+            }
+            
+        ],
+        language: {
+            infoEmpty: "Showing 0 to 0 of 0 entries",
+            zeroRecords: "No matching records found",
+            search: "Search:"
+        },
+        drawCallback: function (settings) {
+            updateDeleteBtn();
+            var api = this.api();
+            console.log(api.page.info())
+            var pageInfo = api.page.info();
+            var start = pageInfo.start + 1;
+            var end = start + api.page.len() - 1;
+            var total = api.page.info().recordsDisplay;
+            $('#restaurant-table_info').html("Showing " + start + " to " + end + " of " + total + " entries");
+            $('#select-all').prop('checked', false);
+            $('.row-checkbox').prop('checked', false);
+        }
+    });
+
+    // Loop through each row in the table
+    dataTable.each(function() {
+      // Get the value in the "status" column
+      var status = $(this).find('td:eq(4)').text();
+      
+      // Replace the text with a checkbox input
+      if (status === 'open') {
+        $(this).find('td:eq(4)').html('<div class="form-check form-switch"><input class="form-check-input mr-2" type="checkbox" id="flexSwitchCheckDefault" checked><label class="form-check-label" for="flexSwitchCheckDefault">Open</label></div>');
+      } else if (status === 'maintenance') {
+        $(this).find('td:eq(4)').html('<div class="form-check form-switch"><input class="form-check-input mr-2" type="checkbox" id="flexSwitchCheckDefault"><label class="form-check-label" for="flexSwitchCheckDefault">Maintenance</label></div>');
+      }
+    });
+
+    var filterHTML = '<label style="margin-left: 10px;">Status: <select id="status-filter" class="form-select form-select-sm rightspace">' +
+    '<option selected value="">All</option>' +
+    '<option value="open">Open</option>' +
+    '<option value="maintenance">Maintenance</option>' +
+    '</select></label>';
+    
+    // Add the filter dropdown to the DataTable layout
+    var filterContainer = $('<div>').addClass('filter-container');
+    $(filterHTML).appendTo(filterContainer);
+    $(filterContainer).appendTo('.dataTables_length');
+    $('.dataTables_length').addClass('display1');
+
+     // Apply the filter on change of dropdown
+     $('#status-filter').on('change', function() {
+        var selectedValue = $(this).val();
+        dataTable.column('status').search(selectedValue).draw();
+        $('#select-all').prop('checked', false);
+        updateDeleteBtn();
+    });
+
+
+    var buttonHTML3 = '<button type="button" id="addresbtn" class="btn btn-success btn-sm rightspace" data-bs-toggle="modal" data-bs-target="#staticBackdropAddRestaurant" style="display: flex;"><i class="fas fa-plus"  style="margin-top: 4px; margin-right:4px;"></i>Add</button>'
+    $(buttonHTML3).appendTo('.dataTables_length');
+
+    var buttonHTML = '<button type="button" id="delresbtn" class="btn btn-danger btn-sm rightspace" data-bs-toggle="modal" data-bs-target="#staticBackdropDeleteRestaurant" disabled>Delete</button>'
+    $(buttonHTML).appendTo('.dataTables_length');
+
+
+    function updateDeleteBtn() {
+        if($('.row-checkbox:checked').length > 0) {
+            $("#delresbtn").prop('disabled', false);
+        } else {
+            $("#delresbtn").prop('disabled', true);
+        }
+    }
+
+    $(document).on('change', '.row-checkbox', function () {
+        var allChecked = $('.row-checkbox').length === $('.row-checkbox:checked').length;
+        $('#select-all').prop('checked', allChecked);
+        updateDeleteBtn();
+    });
+
+    dataTable.on('page', function() {
+        $('#select-all').prop('checked', false);
+    });
+
+    $(document).on('change', '#select-all', function () {
+        $('.row-checkbox').prop('checked', $(this).prop('checked'));
+        updateDeleteBtn();
+    });
+
+    $("#delresbtn").click(function() {
+        var count = $('.row-checkbox:checked').length;
+        $("#checkbox-count").text("Are you sure you want to permanently delete this " + count + " restaurant(s)?\n Deleting the restaurant(s) will also delete associated employee data. \n Once the restaurant(s) has been deleted, the data cannot be recovered!!!");
+    });
+
+    dataTable.on('search.dt', function() {
+        $('#select-all').prop('checked', false);
+    });
+    
+    $("#confirm_delete").click(function() {
+        var restaurantIds = [];
+        $('.row-checkbox:checked').each(function() {
+            var restaurantId = $(this).closest('tr').find('td:eq(0)').text();
+            restaurantIds.push(restaurantId);
+            
+        });
+        console.log(restaurantIds)
+        $.ajax({
+            url: 'http://localhost:8082/restaurant/delete-restaurants',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(restaurantIds),
+            success: function(response, status, xhr) {
+                if(xhr.status == 200) {
+                    console.log(response)
+                    $('#staticBackdropDeleteRestaurant').modal('hide');
+                    $('#deleteSuccessModal').modal('show');
+                    $("#delsuccess1").click(function() {
+                        updateDeleteBtn();
+                        dataTable.ajax.reload();
+                    });
+                    $("#delsuccess2").click(function() {
+                        updateDeleteBtn();
+                        dataTable.ajax.reload();
+                    });
+                }
+            },
+            error: function(error) {
+                console.log(error)
+                $('#staticBackdropDeleteRestaurant').modal('hide');
+                $('#deleteErrorModal').modal('show');
+            }
+        }); 
+    });
+    
+});
+
+$(document).on("click", ".editresrowbtn", function() {
+    var restaurantId = $(this).closest('tr').find('td:eq(0)').text();
+    console.log(restaurantId);
+
+    $.ajax({
+        url: 'http://localhost:8082/restaurant/getrestaurant/' + restaurantId,
+        method: 'GET',
+        success: function(response) {
+            console.log(response);
+            $('#edit-resid').val(response[0]);
+            $('#edit-resname').val(response[1]);
+            var resOpen = response[2].substring(0, 5); 
+            var resClose = response[3].substring(0, 5);
+            $('#edit-resopen').val(resOpen);
+            $('#edit-resclose').val(resClose);
+            if (response[4] === "open") {
+                $('#edit-resstatus').prop('checked', true);
+            } else if (response[4] === "maintenance") {
+                $('#edit-resstatus').prop('checked', false);
+            }
+        },
+        error: function(xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+});
+
+$(document).on("click", "#updateresbtn", function() {
+  var editedResName = $("input[name='restaurant_name']").val();
+  var editedResOpen = $("input[name='restaurant_open']").val() + ':00';
+  var editedResClose = $("input[name='restaurant_close']").val() + ':00';
+  var editedResStatusCheckbox = $("input[name='restaurant_status']");
+  var editedResStatus = editedResStatusCheckbox.is(":checked") ? "open" : "maintenance";
+
+  // Get the restaurant ID from the modal button's ID
+  var restaurantId = $("input[name='restaurant_id']").val();
+  console.log(editedResName)
+  console.log(editedResOpen)
+  console.log(editedResClose)
+  console.log(editedResStatus)
+  // Send the updated data to the server using AJAX
+  $.ajax({
+      type: "PUT",
+      url: "http://localhost:8082/restaurant/update_restaurant/" + restaurantId,
+      contentType: "application/json",
+      data: JSON.stringify({
+        "restaurantName": editedResName,
+        "openTime": editedResOpen,
+        "closeTime": editedResClose,
+        "status": editedResStatus
+      }),
+      success: function() {
+          $('#staticBackdropEditRestaurant').modal('hide');
+          $("#updatesuccessModal").modal('show');
+          $("#updatesuccess1").click(function() {
+              location.reload();
+          });
+          $("#updatesuccess2").click(function() {
+              location.reload();
+          });
+      },
+      error: function() {
+        $('#staticBackdropEditRestaurant').modal('hide');
+        $("#updatefailModal").modal('show');
+      }
+  });
+});
+
+$(document).on("change", ".statusupdate", function() {
+  var status = $(this).prop('checked') ? 'open' : 'maintenance';
+  var restaurantId = $(this).closest('tr').find('td:eq(0)').text();
+
+  $.ajax({
+    url: 'http://localhost:8082/restaurant/updatestatus/' + restaurantId + '/' + status,
+    method: 'PUT',
+    success: function(response) {
+      var alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">The status was updated successfully!' +
+                  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+      $('#alert-container').html(alert);
+      setTimeout(function() {
+        $('#alert-container').html('');
+      }, 3000);
+    },
+    error: function(xhr) {
+      var alert = '<div class="alert alert-danger alert-dismissible fade show" role="alert">The status update failed!' +
+                  '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+      $('#alert-container').html(alert);
+      setTimeout(function() {
+        $('#alert-container').html('');
+      }, 3000);
+    }
+  });
+});
+
+$(document).on("click", ".btn-close", function() {
+  $(this).closest('.alert').alert('close');
+});
+
+$(document).on("click", "#addnewres", function() {
+  var ResName = $("input[name='add_restaurant_name']").val();
+  var ResOpen = $("input[name='add_restaurant_open']").val() + ':00';
+  var ResClose = $("input[name='add_restaurant_close']").val() + ':00';
+  var ResStatusCheckbox = $("input[name='add_restaurant_status']");
+  var ResStatus = ResStatusCheckbox.is(":checked") ? "open" : "maintenance";
+  var ResAccountId = $("select[name='account_email']").val();
+
+  $.ajax({
+      type: "POST",
+      url: "http://localhost:8082/restaurant/add_restaurant",
+      contentType: "application/json",
+      data: JSON.stringify({
+        "restaurantName": ResName,
+        "openTime": ResOpen,
+        "closeTime": ResClose,
+        "status": ResStatus,
+        "accountId" : ResAccountId
+      }),
+      success: function() {
+          $('#staticBackdropAddRestaurant').modal('hide');
+          $("#addsuccessModal").modal('show');
+          $("#addsuccess1").click(function() {
+              location.reload();
+          });
+          $("#addsuccess2").click(function() {
+              location.reload();
+          });
+      },
+      error: function() {
+        $('#staticBackdropAddRestaurant').modal('hide');
+        $("#addfailModal").modal('show');
+      }
+  });
+});
+
+$(document).on("click", "#addresbtn", function() {
+  $.ajax({
+    url: "http://localhost:8082/account/available-accounts",
+    type: "GET",
+    dataType: "json",
+    success: function(response) {
+        var options = "";
+        if (response && response.length > 0) {
+            $.each(response, function(index, account) {
+                options += "<option value='" + account.accountId + "'>" + account.email + "</option>";
+            });
+        } else {
+            options = "<option disabled selected>Please create an account for a new restaurant first</option>";
+            $("#account-email").prop("disabled", true);
+        }
+        $("#account-email").html(options);
+    },
+    error: function(xhr, status, error) {
+        console.log("AJAX Error: " + error);
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>

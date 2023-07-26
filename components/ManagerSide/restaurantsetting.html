@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>R3S Daily Schedule</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.8/index.global.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    
+    <style>
+      body {
+        font-size: .875rem;
+      }
+      :root {
+        --colour1: #00B4D8;
+        --colour2: #00313b;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        background: var(--colour1);
+        /* rtl:raw:
+        right: 0;
+        */
+        bottom: 0;
+        /* rtl:remove */
+        left: 0;
+        z-index: 100; /* Behind the navbar */
+        padding: 48px 0 0; /* Height of navbar */
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+      }
+      .navbar {
+        justify-content: flex-start;
+      }
+      img {
+            width: 120px;
+            height: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+      @media (max-width: 1000px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+
+        .active {
+          border-radius: 10px 10px 10px 10px;
+        }
+      }
+
+      .sidebar-sticky {
+        position: relative;
+        top: 0;
+        height: calc(100vh - 48px);
+        padding-top: .5rem;
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+      }
+
+      .sidebar .nav-link {
+        font-weight: 500;
+        color: #333;
+      }
+
+      .sidebar .nav-link.active {
+        color: #2470dc;
+      }
+
+      .navbar .navbar-toggler {
+        right: 2.75rem;
+      }
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      .side1 {
+            width: 17.5%;
+      }
+	    .ex {
+          margin-left: 50px;
+          position: absolute;
+          right: 10px;
+          margin-top: auto;
+          margin-bottom: auto;
+      }
+      .ul1 {
+        list-style-type: none;
+        margin-top: 5px;
+        padding: 0;
+      }
+      .liacss {
+          color: var(--colour2);
+          padding: 15px;
+          display: flex;
+          margin-left: 1.0rem;
+          font-size: 1.0rem;
+      }
+      ul li a.active {
+          background-color: white;
+          border-radius: 10px 0 0 10px;
+      }
+      .lia1 {
+          margin-right: 1.0rem;
+          line-height: 25px !important;
+      }
+      h1 {
+        left: 0;
+      }
+      .color {
+            color: var(--colour2);
+      }
+      .top2 {
+          margin-top: 5px;
+      }
+      .tablenav {
+        margin-left:5px;
+      }
+      .square {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #555459;
+        border-radius: 2px;
+        display: inline-block;
+      }
+      @media print {
+        main {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0px;
+          left: 0px;
+        }
+
+        #sidebarMenu,#sidebarul,#sidebardiv{
+          display: none;
+        }
+
+        .navbar {
+          display: none;
+        }
+
+        #buttonrow1,#deleteschedule,#clearschedule,#saveschedule,#printschedule {
+          display: none;
+        }
+        
+        .sidebar {
+          display: none !important;
+        }   
+                
+        .square1 {
+          border: 1px solid #009743;
+        }
+
+        .square2 {
+          border: 1px solid #FFCB0A;
+        }
+
+      }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+        <a href="restaurantdailyschedule.html"><img src="../../assets/R3S logo.png" alt="R3S"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link fs-4" aria-current="page" href="restaurantdailyschedule.html">Schedule</a>
+              <a class="nav-link fs-4" href="restaurantemployee.html">Employee</a>
+              <a class="nav-link fs-4 active" href="restaurantsetting.html">Setting</a>
+              <a href="../../components/Logout.html" class="ex"  id="logoutButton">
+                <span class="fas fa-sign-out-alt fa-3x color"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    
+    <div class="container-fluid">
+        
+        
+            <main class="top2">
+              <div class="row">
+                <div class="col">
+                </div>
+                <div class="col-6">
+                    <div class="top2">
+                      <form>
+                        <div class="row mb-3">
+                          <label for="inputEmail3" class="col-sm-2 col-form-label">Restaurant</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputresname3" readonly>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="inputopen3" class="col-sm-2 col-form-label">Open Time</label>
+                          <div class="col-sm-8">
+                            <input type="time" class="form-control" id="inputopen3" required>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="inputclose3" class="col-sm-2 col-form-label">Close Time</label>
+                          <div class="col-sm-8">
+                            <input type="time" class="form-control" id="inputclose3" required>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <div  style="display: flex; align-items: baseline;">
+                            <label for="inputstatus3" class="col-sm-2 col-form-label">Status: </label>
+                            <div class="form-check form-switch">
+                              <input class="form-check-input mr-2" type="checkbox" name="restaurant_status" id="edit-resstatus">
+                              <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        <fieldset class="row mb-3 form-control">
+                          <legend class="col-form-label col-sm-8 pt-0">Account</legend>
+                          <hr>
+                          <div class="row mb-3">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="inputemail3" required>
+                            </div>
+                          </div>  
+                          <div class="row mb-3">
+                            <label for="inputpass3" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="inputpass3" required>
+                            </div>
+                          </div>
+                        </fieldset>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                      </form>
+                    </div>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function() {
+  var accountId;
+  $.ajax({
+        type: "GET",
+        url: "http://localhost:8082/get-session",
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(response) {
+            accountId = response;
+
+            // Use the retrieved session data as needed
+            console.log('Account ID:', accountId);
+
+            // Get the data on page load
+            getData();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Failed to retrieve session data:', errorThrown);
+            window.location.href = '../index1.html';
+        }
+    });
+    
+
+    $('#logoutButton').click(function() {
+        // Send AJAX request to the backend logout endpoint
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8082/logout', // Replace with your actual backend logout endpoint URL
+            xhrFields: {
+                withCredentials: true // Include cookies in the request
+            },
+            success: function(response) {
+                window.location.href = '../Logout.html'; // Redirect to the logout.html page
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle error
+                alert('Logout failed: ' + jqXHR.responseText);
+            }
+        });
+    });
+    
+    var selectedRestaurantId;
+
+
+  // Function to retrieve data using AJAX
+  function getData() {
+    $.ajax({
+      url: 'http://localhost:8082/restaurant/setting/' + accountId, // Replace with your server endpoint to fetch the data
+      method: 'GET',
+      success: function(response) {
+        // Handle the response and populate the form fields
+        populateForm(response);
+      },
+      error: function(error) {
+        console.log('Error:', error);
+      }
+    });
+  }
+
+  // Function to populate the form fields with retrieved data
+  function populateForm(data) {
+    var data = data[0];
+    selectedRestaurantId = data.restaurantId;
+    // Populate the restaurant name
+    $('#inputresname3').val(data.restaurantName);
+
+    // Populate the open and close times
+    $('#inputopen3').val(data.openTime);
+    $('#inputclose3').val(data.closeTime);
+
+    // Populate the restaurant status checkbox
+    if (data.status === 'open') {
+      $('#edit-resstatus').prop('checked', true);
+    } else {
+      $('#edit-resstatus').prop('checked', false);
+    }
+
+    // Populate the account email and password fields
+    $('#inputemail3').val(data.email);
+    $('#inputpass3').val(data.password);
+  }
+
+  $('form').submit(function(event) {
+  event.preventDefault();
+
+  // Get the updated values from the input fields
+  var editedResOpen = $("input[id='inputopen3']").val();
+  var editedResClose = $("input[id='inputclose3']").val();
+  var editedResStatusCheckbox = $("input[name='restaurant_status']");
+  var editedResStatus = editedResStatusCheckbox.is(":checked") ? "open" : "maintenance";
+  var editedEmail = $("input[id='inputemail3']").val();
+  var editedPassword = $("input[id='inputpass3']").val();
+
+
+  // Perform the AJAX request to update the data
+  $.ajax({
+    url: 'http://localhost:8082/restaurant/updatesetting/' + accountId,
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({
+    "openTime": editedResOpen,
+    "closeTime": editedResClose,
+    "status": editedResStatus,
+    "email": editedEmail,
+    "password": editedPassword
+  }),
+    success: function(response) {
+      // Handle the success response
+      console.log('Data updated successfully');
+    },
+    error: function(error) {
+      console.log('Error:', error);
+    }
+  });
+});
+
+
+});
+</script>
+</body>
+</html>
