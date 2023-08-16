@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>R3S Weekly Schedule</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.8/index.global.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    <style>
+        body {
+        font-size: .875rem;
+      }
+      :root {
+        --colour1: #00B4D8;
+        --colour2: #00313b;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        background: var(--colour1);
+        /* rtl:raw:
+        right: 0;
+        */
+        bottom: 0;
+        /* rtl:remove */
+        left: 0;
+        z-index: 100; /* Behind the navbar */
+        padding: 48px 0 0; /* Height of navbar */
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+      }
+      .navbar {
+        justify-content: flex-start;
+      }
+      img {
+            width: 120px;
+            height: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+      @media (max-width: 1000px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+
+        .active {
+          border-radius: 10px 10px 10px 10px;
+        }
+      }
+
+      .sidebar-sticky {
+        position: relative;
+        top: 0;
+        height: calc(100vh - 48px);
+        padding-top: .5rem;
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+      }
+
+      .sidebar .nav-link {
+        font-weight: 500;
+        color: #333;
+      }
+
+      .sidebar .nav-link.active {
+        color: #2470dc;
+      }
+
+      .navbar .navbar-toggler {
+        right: 2.75rem;
+      }
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      .side1 {
+            width: 17.5%;
+      }
+	    .ex {
+          margin-left: 50px;
+          position: absolute;
+          right: 10px;
+          margin-top: auto;
+          margin-bottom: auto;
+      }
+      .ul1 {
+        list-style-type: none;
+        margin-top: 5px;
+        padding: 0;
+      }
+      .liacss {
+          color: var(--colour2);
+          padding: 15px;
+          display: flex;
+          margin-left: 1.0rem;
+          font-size: 1.0rem;
+      }
+      ul li a.active {
+          background-color: white;
+          border-radius: 10px 0 0 10px;
+      }
+      .lia1 {
+          margin-right: 1.0rem;
+          line-height: 25px !important;
+      }
+      h1 {
+        left: 0;
+      }
+      .color {
+        color: var(--colour2);
+      }
+      .fc-event-title,.fc-event-time  {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+      }
+      .fc-h-event, .fc-event-main-frame{
+        flex-direction: column
+      }
+      .top2 {
+          margin-top: 5px;
+      }
+      .tablenav {
+        margin-left:5px;
+      }
+      .square {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #555459;
+        border-radius: 2px;
+        display: inline-block;
+      }
+      @media print {
+        main {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0px;
+          left: 0px;
+        }
+
+        #sidebarMenu,#sidebarul,#sidebardiv{
+          display: none;
+        }
+
+        .navbar {
+          display: none;
+        }
+
+        #buttonrow1,#deleteschedule,#clearschedule,
+        #saveschedule,#printschedule,#toggleButton {
+          display: none;
+        }
+        
+        .sidebar {
+          display: none !important;
+        }   
+                
+        .square1 {
+          border: 1px solid #009743;
+        }
+
+        .square2 {
+          border: 1px solid #FFCB0A;
+        }
+
+        #projectedsalestable {
+          display: table !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+
+
+      }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+        <a href="restaurantdailyschedule.html"><img src="../../assets/R3S logo.png" alt="R3S"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link active fs-4" aria-current="page" href="restaurantdailyschedule.html">Schedule</a>
+              <a class="nav-link fs-4" href="restaurantemployee.html">Employee</a>
+              <a class="nav-link fs-4" href="restaurantsetting.html">Setting</a>
+              <a href="../../components/Logout.html" class="ex"  id="logoutButton">
+                <span class="fas fa-sign-out-alt fa-3x color"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    
+    <div class="container-fluid">
+    <div class="row">
+    
+        <main class="top2">
+          <div id="table-container">
+            <nav class="navbar navbar-expand-lg border-bottom">
+                <!-- <ul class="navbar-nav d-flex justify-content-start">
+                  <li class="nav-item">
+                    <a href="#" class="btn btn-primary" role="button" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="btn btn-primary" role="button" aria-disabled="true"><i class="fas fa-chevron-right"></i></a>
+                  </li>
+                </ul> -->
+                <ul class="navbar-nav d-flex justify-content-end w-100">
+                  <li class="nav-item tablenav">
+                    <div class="input-group flex-nowrap">
+                      <span class="input-group-text" id="addon-wrapping"><i class="bi bi-calendar"></i></span>
+                      <input type="text" class="form-control" placeholder="Select date" aria-label="Select date" aria-describedby="addon-wrapping" name="selectdate">
+                    </div>
+                  </li>
+                  <li class="nav-item tablenav">
+                    <select class="form-control" name="restaurantname" id="selectrestaurant" aria-label="Default select example"></select>
+                  </li>
+                  <li class="nav-item tablenav">
+                    <a href="restaurantdailyschedule.html" class="btn btn-primary" role="button" aria-disabled="true">Daily</a>
+                  </li>
+                </ul>
+            </nav>
+            <br>
+            <div style="text-align: center;">
+              <button class="btn btn-light" id="toggleButton">Show</button>
+            </div>
+            <br>
+            <table class="table table-info table-striped table-hover" id="projectedsalestable" style="opacity: 0; transition: opacity 1s ease, visibility 1s ease; display: none;">
+              <tr>
+                <th scope="col"></th>
+                <th scope="col" id="monday"></th>
+                <th scope="col" id="tuesday"></th>
+                <th scope="col" id="wednesday"></th>
+                <th scope="col" id="thursday"></th>
+                <th scope="col" id="friday"></th>
+                <th scope="col" id="saturday"></th>
+                <th scope="col" id="sunday"></th>
+              </tr>
+              <tr>
+                <td scope="row">Projected Sales (RM)</td>
+                <td id="monsales"></td>
+                <td id="tuesales"></td>
+                <td id="wedsales"></td>
+                <td id="thusales"></td>
+                <td id="frisales"></td>
+                <td id="satsales"></td>
+                <td id="sunsales"></td>
+              </tr>
+              <tr>
+                <td scope="row">Projected Labour Hour</td>
+                <td id="monhour"></td>
+                <td id="tuehour"></td>
+                <td id="wedhour"></td>
+                <td id="thuhour"></td>
+                <td id="frihour"></td>
+                <td id="sathour"></td>
+                <td id="sunhour"></td>
+              </tr>
+              <tr>
+                <td scope="row">Projected SPLH</td>
+                <td id="monsplh"></td>
+                <td id="tuesplh"></td>
+                <td id="wedsplh"></td>
+                <td id="thusplh"></td>
+                <td id="frisplh"></td>
+                <td id="satsplh"></td>
+                <td id="sunsplh"></td>
+              </tr>
+              <tr>
+                <td scope="row">Scheduled Labour Hour</td>
+                <td id="monscheduledlabourhour">0</td>
+                <td id="tuescheduledlabourhour">0</td>
+                <td id="wedscheduledlabourhour">0</td>
+                <td id="thuscheduledlabourhour">0</td>
+                <td id="frischeduledlabourhour">0</td>
+                <td id="satscheduledlabourhour">0</td>
+                <td id="sunscheduledlabourhour">0</td>
+              </tr>
+              <tr>
+                <td scope="row">Scheduled SPLH</td>
+                <td id="monscheduledsplh">0</td>
+                <td id="tuescheduledsplh">0</td>
+                <td id="wedscheduledsplh">0</td>
+                <td id="thuscheduledsplh">0</td>
+                <td id="frischeduledsplh">0</td>
+                <td id="satscheduledsplh">0</td>
+                <td id="sunscheduledsplh">0</td>
+              </tr>
+            </table>
+            <div id="calendar"></div>
+          </div>
+
+          <!-- Edit event Modal -->
+          <div class="modal fade" id="staticBackdropEditEvent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Edit Current Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="addevent-form">
+                    <div class="form-group">
+                      <label for="editemployeeName">Employee Name</label>
+                      <div class="input-group">
+                        <select class="form-control" id="edit-employee-event" required>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="workingPeriod">Working Period</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="workingPeriodstart" placeholder="Start (HHMM)" required>
+                        <span class="input-group-addon">&nbsp;_&nbsp;</span>
+                        <input type="text" class="form-control" id="workingPeriodend" placeholder="End (HHMM)" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="breakPeriod">Break Period</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="breakPeriodstart" placeholder="Start (HHMM)">
+                        <span class="input-group-addon">&nbsp;_&nbsp;</span>
+                        <input type="text" class="form-control" id="breakPeriodend" placeholder="End (HHMM)">
+                        <button type="button" class="btn btn-secondary" id="clearBreakPeriod">Clear</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger mr-auto" id="deleteevent">Delete</button>
+                  <button type="button" class="btn btn-primary" id="editevent">Edit</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="canceleditevent">Close</button>
+                </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Add event Modal -->
+          <div class="modal fade" id="staticBackdropAddEvent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add New Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="addevent-form">
+                    <div class="form-group">
+                      <label for="addemployeeName">Employee Name</label>
+                        <select class="form-control" id="add-employee-event" required>
+                          <option selected>Select Employee</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="workingPeriod">Working Period</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="addworkingPeriodstart" placeholder="Start (HHMM)" required>
+                        <span class="input-group-addon">&nbsp;_&nbsp;</span>
+                        <input type="text" class="form-control" id="addworkingPeriodend" placeholder="End (HHMM)" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="breakPeriod">Break Period</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="addbreakPeriodstart" placeholder="Start (HHMM)">
+                        <span class="input-group-addon">&nbsp;_&nbsp;</span>
+                        <input type="text" class="form-control" id="addbreakPeriodend" placeholder="End (HHMM)">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" id="addnewevent">Add</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="canceladdevent">Close</button>
+                </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Remove event Modal -->
+          <div class="modal fade" id="staticBackdropRemoveEvent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Remove Event</h5>
+                </div>
+                <div class="modal-body">
+                  Are you sure to remove this event in this row?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="removeevent">Remove</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelremove">Close</button>
+                </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Delete Schedule Modal -->
+          <div class="modal fade" id="staticBackdropDeleteSchedule" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Schedule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Are you sure to delete the schedule weekly?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="DeleteSche">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+          </div>
+
+          <br>
+          
+          <div style="display: flex; justify-content: end;" id="buttonrow2">
+            <span class="square square1" style="background-color:#009743"></span>&nbsp;Full Time&nbsp;
+            <span class="square square2" style="background-color:#FFCB0A"></span>&nbsp;Part Time&nbsp;
+          </div>
+
+          <br>
+
+          <div style="display: flex; justify-content: center;" id="buttonrow1">
+            <button type="button" class="btn btn-danger" id="deleteschedule" disabled>Delete</button>&nbsp;&nbsp;
+            <button type="button" class="btn btn-danger" id="clearschedule">Clear</button>&nbsp;&nbsp;
+            <button type="button" class="btn btn-primary" id="saveschedule">Save</button>&nbsp;&nbsp;
+            <button type="button" class="btn btn-dark" id="printschedule">Print</button>
+          </div>
+
+          <br>
+
+          <div id="toast-container" class="position-fixed bottom-0 end-0 p-3">
+            <div id="myToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+              <div class="toast-header bg-success">
+                <strong class="me-auto text-white">Success</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body text-white" style="background-color:#5EAB87;">
+                Data saved successfully
+              </div>
+            </div>
+          </div>
+
+          <div id="toast-container-fail" class="position-fixed bottom-0 end-0 p-3">
+            <div id="myToastfail" class="toast bg-danger"  role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+              <div class="toast-header bg-danger">
+                <strong class="me-auto text-white">Failed</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body text-white" style="background-color:#A45A52;">
+                Data saved failed
+              </div>
+            </div>
+          </div>
+
+        </main>
+    </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function() {
+  var accountId;
+  $.ajax({
+        type: "GET",
+        url: "http://localhost:8082/get-session",
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(response) {
+            accountId = response;
+
+            // Use the retrieved session data as needed
+            console.log('Account ID:', accountId);
+            fetchRestaurantsAndInitialize(accountId, selectedDate);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Failed to retrieve session data:', errorThrown);
+            window.location.href = '../index1.html';
+        }
+    });
+    
+
+    $('#logoutButton').click(function() {
+        // Send AJAX request to the backend logout endpoint
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8082/logout', // Replace with your actual backend logout endpoint URL
+            xhrFields: {
+                withCredentials: true // Include cookies in the request
+            },
+            success: function(response) {
+                window.location.href = '../Logout.html'; // Redirect to the logout.html page
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle error
+                alert('Logout failed: ' + jqXHR.responseText);
+            }
+        });
+    });
+  
+  $("#toggleButton").click(function() {
+    var $table = $("#projectedsalestable");
+    if ($table.css("opacity") == 0) {
+      $table.css("opacity", 1);
+      $table.css("display", "table");
+    } else {
+      $table.css("opacity", 0);
+      $table.css("display", "none");
+    }
+    var buttonText = $(this).text();
+    $(this).text(buttonText === "Show" ? "Hide" : "Show");
+  });
+
+  var res_openTime;  
+  var res_closeTime;
+  
+  var datesselected = getWeekDates(selectedDate);
+  var selectedbusinessStartDate = datesselected[0];
+  var selectedbusinessEndDate = datesselected[1];
+
+  var selectedDate = moment().format('YYYY-MM-DD');
+
+  $('input[name="selectdate"]').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'),10)
+  }, function(start, end, label) {
+    selectedDate = start.format('YYYY-MM-DD');
+    var dateschange = getWeekDates(selectedDate);
+    selectedbusinessStartDate = dateschange[0];
+    selectedbusinessEndDate = dateschange[1];
+    getProjectedSalesData(selectedDate, selectedRestaurantId);
+    initializeCalendar(selectedRestaurantId, selectedDate);
+  });
+
+  var isoString = moment(selectedDate).toISOString();
+
+  var selectedRestaurantId = 1;
+
+  function fetchRestaurantsAndInitialize(accountId, selectedDate) {
+  $.ajax({
+    type: "GET",
+    url: 'http://localhost:8082/restaurant/getrestaurantbyaccid/' + accountId,
+    success: function(data) {
+      $.each(data, function(key, value) {
+        $("<option></option>")
+          .val(value.restaurantId)
+          .text(value.restaurantName)
+          .prop("selected", true)
+          .prop("disabled", true)
+          .appendTo("#selectrestaurant");
+
+        // Set the initial selected value
+        selectedRestaurantId = value.restaurantId;
+      });
+      
+      console.log(selectedRestaurantId)
+      getProjectedSalesData(selectedDate, selectedRestaurantId);
+      initializeCalendar(selectedRestaurantId, selectedDate);
+    },
+    error: function() {
+      console.log("Error");
+    }
+  });
+}
+  
+
+  
+  getProjectedSalesData(selectedDate, selectedRestaurantId);
+  initializeCalendar(selectedRestaurantId, selectedDate);
+
+  var datePicker = $('input[name="selectdate"]').data('daterangepicker');
+
+//   $('.fa-chevron-left').click(function() {
+//     var newDate = moment(datePicker.startDate).subtract(7, 'days');
+//     datePicker.setStartDate(newDate);
+//     selectedDate = newDate.format('YYYY-MM-DD');
+//     console.log(selectedbusinessStartDate)
+//     getProjectedSalesData(selectedDate, selectedRestaurantId);
+//     initializeCalendar(selectedRestaurantId, selectedDate);
+//   });
+
+//   $('.fa-chevron-right').click(function() {
+//     var newDate = moment(datePicker.startDate).add(7, 'days');
+//     datePicker.setStartDate(newDate);
+//     selectedDate = newDate.format('YYYY-MM-DD');
+    
+//     getProjectedSalesData(selectedDate, selectedRestaurantId);
+//     initializeCalendar(selectedRestaurantId, selectedDate);
+//   });
+  
+
+  function initializeCalendar(selectedRestaurantId, selectedDate) {
+    console.log('1')
+    $('#saveschedule').off('click');
+    $('#deleteschedule').off('click');
+    var events1 = [];
+    var scheduleId = 1;
+    var calendarEl = $('#calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl[0], {
+      schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+      themeSystem: 'bootstrap5',
+      timeZone: 'local',
+      initialView: 'dayGridWeek',
+      initialDate:selectedbusinessStartDate,
+      height: 'auto',
+      headerToolbar: false,
+      editable: true,
+      firstDay: 1,
+      displayEventEnd: true,
+      events: [],
+      eventTimeFormat: {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      },
+      eventDisplay: 'block',
+      eventClick: function(info) {
+        var event = info.event;
+        // show the modal here
+        $('#staticBackdropEditEvent').modal('show');
+        console.log(event.title)
+        // remove previously attached click event handlers
+        $('#editevent').off('click');
+        $('#canceleditevent').off('click');
+
+        // Extract and format the event data
+        var employeeName = event.title;
+        var workingPeriodStart = event.start.getHours().toString().padStart(2, '0') + event.start.getMinutes().toString().padStart(2, '0');
+        var workingPeriodEnd = event.end.getHours().toString().padStart(2, '0') + event.end.getMinutes().toString().padStart(2, '0');
+        var breakPeriodStart;
+        var breakPeriodEnd;
+        if(event.extendedProps.breakPeriod) {
+          breakPeriodStart = event.extendedProps.breakPeriod.substring(0, 2) + event.extendedProps.breakPeriod.substring(2, 4);
+          breakPeriodEnd = event.extendedProps.breakPeriod.substring(5, 7) + event.extendedProps.breakPeriod.substring(7, 9);
+        }
+        var employeeId = event.extendedProps.employeeId;
+        var formattedDate = event.start.toISOString().split('T')[0];
+        var currentEmployeeName = event.title;
+        var currentEmployeeType = event.backgroundColor;
+        console.log(formattedDate);
+        console.log(currentEmployeeName);
+        console.log(currentEmployeeType);
+        console.log(employeeId);
+        // Clear the select element
+        $('#edit-employee-event').empty();
+
+        // Create the default option element
+        var defaultOption = $('<option>').attr('value', '').text(employeeName).attr('selected', 'selected');;
+        $('#edit-employee-event').append(defaultOption);
+
+        // Set the event data in the modal
+        $('#workingPeriodstart').val(workingPeriodStart);
+        $('#workingPeriodend').val(workingPeriodEnd);
+        $('#breakPeriodstart').val(breakPeriodStart);
+        $('#breakPeriodend').val(breakPeriodEnd);
+
+        // $.ajax({
+        //   url: 'http://localhost:8082/employee/availableemployees',
+        //   method: 'GET',
+        //   data: {
+        //     restaurantId: selectedRestaurantId,
+        //     businessDate: formattedDate // Pass the clickedDate as a parameter to the backend
+        //   },
+        //   success: function(response) {
+        //     // Store the response data in the local array
+        //     employeeData = response;
+
+        //     // Create an option element for each restaurant name and append it to the select element
+        //     $.each(employeeData, function(index, employee) {
+        //       var option = $('<option>').attr('value', employee.employeeId).text(employee.employeeName);
+
+        //       $('#edit-employee-event').append(option);
+        //     });
+
+        //   },
+        //   error: function(xhr, status, error) {
+        //     console.log(error);
+        //   }
+        // });
+        $.ajax({
+          url: 'http://localhost:8082/employee/availableemployees',
+          method: 'GET',
+          data: {
+            restaurantId: selectedRestaurantId
+          },
+          success: function(response) {
+            // Store the response data in the local array
+            employeeData = response;
+
+            // Filter employees who are not already scheduled for the date
+            var unscheduledEmployees = employeeData.filter(function(employee) {
+              return !isEmployeeScheduled(employee.employeeId, formattedDate);
+            });
+            // Create an option element for each unscheduled employee and append it to the select element
+            $.each(unscheduledEmployees, function(index, employee) {
+              var option = $('<option>').attr('value', employee.employeeId).text(employee.employeeName);
+              $('#edit-employee-event').append(option);
+            });
+          },
+          error: function(xhr, status, error) {
+            console.log(error);
+          }
+        });
+
+        function isEmployeeScheduled(employeeId, formattedDate) {
+          var events = calendar.getEvents();
+
+          // Loop through events array and check if the employee is already scheduled for the date
+          for (var i = 0; i < events.length; i++) {
+            var event = events[i];
+            if (event.extendedProps.employeeId === employeeId && event.extendedProps.businessDate === formattedDate) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        $('#clearBreakPeriod').on('click', function() {
+          $('#breakPeriodstart').val('');
+          $('#breakPeriodend').val('');
+        });
+
+        $('#editevent').on('click', function() {
+          event.remove(); // remove the current existing eventdata
+
+          // get the start and end times from the modal inputs
+          var workingPeriodstart = $('#workingPeriodstart').val();
+          var workingPeriodend = $('#workingPeriodend').val();
+          var breakPeriodstart = $('#breakPeriodstart').val();
+          var breakPeriodend = $('#breakPeriodend').val();
+
+          // get the selected employee data from the select element
+          var selectedEmployeeId = $('#edit-employee-event').val();
+          var selectedEmployee = employeeData.find(function(employee) {
+            return employee.employeeId.toString() === selectedEmployeeId;
+          });
+
+          if (selectedEmployee) {
+
+            // clear the events1 array
+            events1.length = 0;
+
+            // Check if there is a breaking period
+            if (breakPeriodstart && breakPeriodend) {
+              var event1 = {
+                id: scheduleId,
+                title: selectedEmployee.employeeName,
+                employeeId: parseInt(selectedEmployeeId),
+                start: moment(formattedDate + ' ' + workingPeriodstart, 'YYYY-MM-DD HHmm').toISOString(),
+                end: moment(formattedDate + ' ' + workingPeriodend, 'YYYY-MM-DD HHmm').toISOString(),
+                breakPeriod: breakPeriodstart + '-' + breakPeriodend,
+                businessDate: formattedDate,
+                backgroundColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()],
+                borderColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()]
+              };
+              calendar.addEvent(event1);
+            } else {
+              var event1 = {
+                id: scheduleId,
+                title: selectedEmployee.employeeName,
+                employeeId: parseInt(selectedEmployeeId),
+                start: moment(formattedDate + ' ' + workingPeriodstart, 'YYYY-MM-DD HHmm').toISOString(),
+                end: moment(formattedDate + ' ' + workingPeriodend, 'YYYY-MM-DD HHmm').toISOString(),
+                breakPeriod: null,
+                businessDate: formattedDate,
+                backgroundColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()],
+                borderColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()]
+              };
+              calendar.addEvent(event1);
+            }
+
+            // hide the modal
+            $('#staticBackdropEditEvent').modal('hide');
+
+            updateOTFields();
+            calendar.render();
+            console.log(calendar.getEvents())
+            $('#addworkingPeriodstart, #addworkingPeriodend, #addbreakPeriodstart, #addbreakPeriodend').val('');
+
+          }else{
+            
+            // clear the events1 array
+            events1.length = 0;
+
+            // Check if there is a breaking period
+            if (breakPeriodstart && breakPeriodend) {
+              var event1 = {
+                id: scheduleId,
+                title: currentEmployeeName,
+                employeeId: parseInt(employeeId),
+                start: moment(formattedDate + ' ' + workingPeriodstart, 'YYYY-MM-DD HHmm').toISOString(),
+                end: moment(formattedDate + ' ' + workingPeriodend, 'YYYY-MM-DD HHmm').toISOString(),
+                breakPeriod: breakPeriodstart + '-' + breakPeriodend,
+                businessDate: formattedDate,
+                backgroundColor: currentEmployeeType, //employeeTypes[selectedEmployee.employeeType.toLowerCase()]
+                borderColor: currentEmployeeType
+              };
+              calendar.addEvent(event1);
+            } else {
+              var event1 = {
+                id: scheduleId,
+                title: currentEmployeeName,
+                employeeId: parseInt(employeeId),
+                start: moment(formattedDate + ' ' + workingPeriodstart, 'YYYY-MM-DD HHmm').toISOString(),
+                end: moment(formattedDate + ' ' + workingPeriodend, 'YYYY-MM-DD HHmm').toISOString(),
+                breakPeriod: null,
+                businessDate: formattedDate,
+                backgroundColor: currentEmployeeType, //employeeTypes[selectedEmployee.employeeType.toLowerCase()]
+                borderColor: currentEmployeeType
+              };
+              calendar.addEvent(event1);
+            }
+
+            // hide the modal
+            $('#staticBackdropEditEvent').modal('hide');
+
+            updateOTFields();
+            calendar.render();
+            console.log(calendar.getEvents())
+            $('#addworkingPeriodstart, #addworkingPeriodend, #addbreakPeriodstart, #addbreakPeriodend').val('');
+          }
+        });
+
+        // Event listener for the "Delete" button
+        $('#deleteevent').click(function() {
+          $('#staticBackdropEditEvent').modal('hide');
+          
+          $('#staticBackdropRemoveEvent').modal('show');
+          
+        });
+
+        // remove previously attached click event handlers
+        $('#removeevent').off('click');
+        $('#cancelremove').off('click');
+
+        $('#removeevent').on('click', function() {
+          // Remove the clicked event from the calendar
+          event.remove();
+          console.log(calendar.getEvents())
+          updateOTFields();
+          // hide the modal
+          $('#staticBackdropRemoveEvent').modal('hide');
+          
+          calendar.render();
+        });
+
+      },
+      dateClick: function(info) {
+        // Access the clicked date
+        var clickedDate = info.date;
+        var dateObj = new Date(clickedDate);
+        var year = dateObj.getFullYear();
+        var month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+        var day = ("0" + dateObj.getDate()).slice(-2);
+        var formattedDate = year + "-" + month + "-" + day;
+
+        // show the modal here
+        $('#staticBackdropAddEvent').modal('show');
+        
+        // remove previously attached click event handlers
+        $('#addnewevent').off('click');
+        $('#canceladdevent').off('click');
+
+        // Define a variable to store the employee data
+        var employeeData = [];
+
+        // Populate employee names and IDs using AJAX
+        // $.ajax({
+        //   url: 'http://localhost:8082/employee/availableemployees',
+        //   method: 'GET',
+        //   data: {
+        //     restaurantId: selectedRestaurantId
+        //     //businessDate: formattedDate // Pass the clickedDate as a parameter to the backend
+        //   },
+        //   success: function(response) {
+        //     // Store the response data in the local array
+        //     employeeData = response;
+
+        //     // Clear the select element
+        //     $('#add-employee-event').empty();
+        //     // Create the default option element
+        //     var defaultOption = $('<option>').attr('value', '').text('Select Available Employee');
+        //     $('#add-employee-event').append(defaultOption);
+        //     // Create an option element for each restaurant name and append it to the select element
+        //     $.each(employeeData, function(index, employee) {
+        //       var option = $('<option>').attr('value', employee.employeeId).text(employee.employeeName);
+        //       $('#add-employee-event').append(option);
+        //     });
+
+        //     // add click event listener to the "Add" button in the modal
+        //     $('#addnewevent').on('click', function() {
+        //       // get the start and end times from the modal inputs
+        //       var workingPeriodstart = $('#addworkingPeriodstart').val();
+        //       var workingPeriodend = $('#addworkingPeriodend').val();
+        //       var breakPeriodstart = $('#addbreakPeriodstart').val();
+        //       var breakPeriodend = $('#addbreakPeriodend').val();
+
+        //       // get the selected employee data from the select element
+        //       var selectedEmployeeId = $('#add-employee-event').val();
+        //       var selectedEmployee = employeeData.find(function(employee) {
+        //         return employee.employeeId.toString() === selectedEmployeeId;
+        //       });
+
+        //       // clear the events1 array
+        //       events1.length = 0;
+
+        //       // Check if there is a breaking period
+        //       if (breakPeriodstart && breakPeriodend) {
+        //         var event = {
+        //           id: scheduleId,
+        //           title: selectedEmployee.employeeName,
+        //           employeeId: parseInt(selectedEmployeeId),
+        //           start: moment(formattedDate + ' ' + workingPeriodstart, 'YYYY-MM-DD HHmm').toISOString(),
+        //           end: moment(formattedDate + ' ' + workingPeriodend, 'YYYY-MM-DD HHmm').toISOString(),
+        //           breakPeriod: breakPeriodstart + '-' + breakPeriodend,
+        //           businessDate: formattedDate,
+        //           backgroundColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()]
+        //         };
+        //         calendar.addEvent(event);
+        //       } else {
+        //         var event = {
+        //           id: scheduleId,
+        //           title: selectedEmployee.employeeName,
+        //           employeeId: parseInt(selectedEmployeeId),
+        //           start: moment(formattedDate + ' ' + workingPeriodstart, 'YYYY-MM-DD HHmm').toISOString(),
+        //           end: moment(formattedDate + ' ' + workingPeriodend, 'YYYY-MM-DD HHmm').toISOString(),
+        //           breakPeriod: null,
+        //           businessDate: formattedDate,
+        //           backgroundColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()]
+        //         };
+        //         calendar.addEvent(event);
+        //       }
+
+        //       // hide the modal
+        //       $('#staticBackdropAddEvent').modal('hide');
+
+        //       //updateOTFields();
+        //       console.log(calendar.getEvents())
+        //       calendar.render();
+
+        //       $('#addworkingPeriodstart, #addworkingPeriodend, #addbreakPeriodstart, #addbreakPeriodend').val('');
+        //     });
+        //     calendar.render();
+        //   },
+        //   error: function(xhr, status, error) {
+        //     console.log(error);
+        //   }
+        // });
+        $.ajax({
+          url: 'http://localhost:8082/employee/availableemployees',
+          method: 'GET',
+          data: {
+            restaurantId: selectedRestaurantId,
+          },
+          success: function(response) {
+            // Store the response data in the local array
+            employeeData = response;
+
+            // Filter employees who are not already scheduled for the date
+            var unscheduledEmployees = employeeData.filter(function(employee) {
+              return !isEmployeeScheduled(employee.employeeId, formattedDate);
+            });
+
+            // Clear the select element
+            $('#add-employee-event').empty();
+
+            // Create the default option element
+            var defaultOption = $('<option>').attr('value', '').text('Select Available Employee');
+            $('#add-employee-event').append(defaultOption);
+
+            // Create an option element for each unscheduled employee and append it to the select element
+            $.each(unscheduledEmployees, function(index, employee) {
+              var option = $('<option>').attr('value', employee.employeeId).text(employee.employeeName);
+              $('#add-employee-event').append(option);
+            });
+
+            // add click event listener to the "Add" button in the modal
+            $('#addnewevent').on('click', function() {
+              // get the start and end times from the modal inputs
+              var workingPeriodstart = $('#addworkingPeriodstart').val();
+              var workingPeriodend = $('#addworkingPeriodend').val();
+              var breakPeriodstart = $('#addbreakPeriodstart').val();
+              var breakPeriodend = $('#addbreakPeriodend').val();
+
+              // get the selected employee data from the select element
+              var selectedEmployeeId = $('#add-employee-event').val();
+              var selectedEmployee = employeeData.find(function(employee) {
+                return employee.employeeId.toString() === selectedEmployeeId;
+              });
+
+              // clear the events1 array
+              events1.length = 0;
+
+              // Check if there is a breaking period
+              if (breakPeriodstart && breakPeriodend) {
+                var event = {
+                  id: scheduleId,
+                  title: selectedEmployee.employeeName,
+                  employeeId: parseInt(selectedEmployeeId),
+                  start: moment(formattedDate + ' ' + workingPeriodstart, 'YYYY-MM-DD HHmm').toISOString(),
+                  end: moment(formattedDate + ' ' + workingPeriodend, 'YYYY-MM-DD HHmm').toISOString(),
+                  breakPeriod: breakPeriodstart + '-' + breakPeriodend,
+                  businessDate: formattedDate,
+                  backgroundColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()],
+                  borderColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()]
+                };
+                calendar.addEvent(event);
+              } else {
+                var event = {
+                  id: scheduleId,
+                  title: selectedEmployee.employeeName,
+                  employeeId: parseInt(selectedEmployeeId),
+                  start: moment(formattedDate + ' ' + workingPeriodstart, 'YYYY-MM-DD HHmm').toISOString(),
+                  end: moment(formattedDate + ' ' + workingPeriodend, 'YYYY-MM-DD HHmm').toISOString(),
+                  breakPeriod: null,
+                  businessDate: formattedDate,
+                  backgroundColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()],
+                  borderColor: employeeTypes[selectedEmployee.employeeType.toLowerCase()]
+                };
+                calendar.addEvent(event);
+              }
+
+              // hide the modal
+              $('#staticBackdropAddEvent').modal('hide');
+
+              updateOTFields();
+              console.log(calendar.getEvents())
+              calendar.render();
+
+              $('#addworkingPeriodstart, #addworkingPeriodend, #addbreakPeriodstart, #addbreakPeriodend').val('');
+            });
+            calendar.render();
+          },
+          error: function(xhr, status, error) {
+            console.log(error);
+          }
+        });
+
+        function isEmployeeScheduled(employeeId, formattedDate) {
+          var events = calendar.getEvents();
+
+          // Loop through events array and check if the employee is already scheduled for the date
+          for (var i = 0; i < events.length; i++) {
+            var event = events[i];
+            if (event.extendedProps.employeeId === employeeId && event.extendedProps.businessDate === formattedDate) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+
+      }
+    });
+    calendar.render();
+
+    // Helper function to update the OT fields
+    function updateOTFields() {
+      var events = calendar.getEvents(); // Get all events from the calendar
+      var scheduledHourByDay = {}; // Object to store scheduled hours by day
+      var projectedSalesByDay = {}; // Object to store projected sales by day
+
+      events.forEach(function(event) {
+        var workingStart = moment(event.start).format('HHmm');
+        var workingEnd = moment(event.end).format('HHmm');
+        var breakStart = null;
+        var breakEnd = null;
+
+        if (event.extendedProps.breakPeriod) {
+          breakStart = event.extendedProps.breakPeriod.substring(0, 2) + event.extendedProps.breakPeriod.substring(2, 4);
+          breakEnd = event.extendedProps.breakPeriod.substring(5, 7) + event.extendedProps.breakPeriod.substring(7, 9);
+        }
+
+        var totalWorkingHour = calculateTotalWorkingHour(workingStart, workingEnd, breakStart, breakEnd);
+        var overtime = calculateOvertime(totalWorkingHour);
+
+        event.setExtendedProp('totalworkinghour', parseFloat(totalWorkingHour).toFixed(1));
+        event.setExtendedProp('overtime', parseFloat(overtime).toFixed(1));
+
+        var eventDate = moment(event.start).format('ddd').toLowerCase(); // Get the day of the week in lowercase (e.g., "mon", "tue", etc.)
+        scheduledHourByDay[eventDate] = (scheduledHourByDay[eventDate] || 0) + totalWorkingHour;
+      });
+
+      // Retrieve projected sales values for each day of the week
+      // for (var i = 1; i < 8; i++) {
+      //   var projectedSales = parseFloat($('#table-container').find('tr:eq(1)').find('td:eq(' + i + ')').text());
+      //   var dayOfWeek = moment().startOf('week').add(i, 'days').format('ddd').toLowerCase(); // Get the day of the week in lowercase (e.g., "mon", "tue", etc.)
+      //   projectedSalesByDay[dayOfWeek] = projectedSales;
+      // }
+
+      var weekStartDate = moment().startOf('week');
+      for (var i = 1; i < 8; i++) {
+        var projectedSales = parseFloat($('#table-container').find('tr:eq(1)').find('td:eq(' + i + ')').text());
+        var dayOfWeek = moment(weekStartDate).add(i, 'days').format('ddd').toLowerCase(); // Get the day of the week in lowercase (e.g., "mon", "tue", etc.)
+        projectedSalesByDay[dayOfWeek] = projectedSales;
+      }
+
+      // Iterate over the days and update the corresponding table cells with the scheduled hours and SPLH
+      // for (var day in scheduledHourByDay) {
+      //   var scheduledHour = parseFloat(scheduledHourByDay[day]).toFixed(1);
+      //   var projectedSales = projectedSalesByDay[day];
+      //   var scheduledSPLH = 0;
+
+      //   if (scheduledHour !== Infinity && scheduledHour !== null && scheduledHour !== 0) {
+      //     scheduledSPLH = projectedSales / scheduledHour;
+      //   }
+
+      //   $('#table-container').find('td[id="' + day + 'scheduledlabourhour"]').text(scheduledHour);
+      //   $('#table-container').find('td[id="' + day + 'sales"]').text(projectedSales);
+      //   $('#table-container').find('td[id="' + day + 'scheduledsplh"]').text(parseFloat(scheduledSPLH).toFixed(1));
+
+      // }
+      var tableContainer = $('#table-container');
+      var scheduledLabourHourCells = tableContainer.find('td[id$="scheduledlabourhour"]');
+      var salesCells = tableContainer.find('td[id$="sales"]');
+      var scheduledSPLHCells = tableContainer.find('td[id$="scheduledsplh"]');
+
+      scheduledLabourHourCells.text('0');
+      scheduledSPLHCells.text('0');
+
+      for (var day in scheduledHourByDay) {
+        var scheduledHour = parseFloat(scheduledHourByDay[day]).toFixed(1);
+        var projectedSales = projectedSalesByDay[day];
+        var scheduledSPLH = 0;
+
+        if (scheduledHour !== Infinity && scheduledHour !== null && scheduledHour !== 0) {
+          scheduledSPLH = projectedSales / scheduledHour;
+        }
+
+        scheduledLabourHourCells.filter('[id$="' + day + 'scheduledlabourhour"]').text(scheduledHour);
+        salesCells.filter('[id$="' + day + 'sales"]').text(projectedSales);
+        scheduledSPLHCells.filter('[id$="' + day + 'scheduledsplh"]').text(parseFloat(scheduledSPLH).toFixed(1));
+      }
+    }
+
+    // Retrieve the data from the API
+    $.ajax({
+      url: 'http://localhost:8082/employee/employeeschedulesweek',
+      method: 'GET',
+      data: {
+        restaurantId: selectedRestaurantId,
+        businessStartDate: selectedbusinessStartDate,
+        businessEndDate: selectedbusinessEndDate
+      },
+      success: function(data) {
+        var events = [];
+        data.scheduleWeek.forEach(function(scheduleWeek) {
+        var workingPeriod = scheduleWeek.workingPeriod;
+        var businessDate = scheduleWeek.businessDate;
+
+        // Extract the start and end times from the workingPeriod string
+        var startHour = workingPeriod.substring(0, 2);
+        var startMinute = workingPeriod.substring(2, 4);
+        var endHour = workingPeriod.substring(5, 7);
+        var endMinute = workingPeriod.substring(7, 9);
+
+        // Combine the businessDate with the start and end times
+        var start = new Date(businessDate + "T" + startHour + ":" + startMinute + ":00");
+        var end = new Date(businessDate + "T" + endHour + ":" + endMinute + ":00");
+
+        var employee = data.employeeWeek.find(function(emp) {
+          return emp.employeeId === scheduleWeek.employeeId;
+        });
+        var employeeType = employee.employeeType.toLowerCase();
+        var backgroundColor = employeeTypes[employeeType];
+
+        var event = {
+          id: scheduleWeek.scheduleId,
+          title: employee.employeeName,
+          employeeId: scheduleWeek.employeeId,
+          start: start.toISOString(),
+          end: end.toISOString(),
+          breakPeriod: scheduleWeek.breakPeriod,
+          businessDate: scheduleWeek.businessDate,
+          backgroundColor: backgroundColor,
+          borderColor: backgroundColor
+        };
+
+        events.push(event);
+      });
+
+      if (events.length > 0) {
+        $('#deleteschedule').prop('disabled', false); // enable the button
+      }
+
+      // Update the calendar with the retrieved data
+      calendar.setOption('events', events);
+
+      
+      updateOTFields();
+
+      calendar.render();
+      },
+      error: function(xhr, status, error) {
+        console.log(error);
+      }
+     
+    });
+
+    // Predefined colors for different employee types
+    var employeeTypes = {
+      'full time': '#009743',
+      'part time': '#FFCB0A'
+    };
+
+
+    calendar.render();
+
+    $('#clearschedule').on('click', function() {
+      calendar.removeAllEvents();
+      $('#deleteschedule').prop('disabled', true);
+    });
+
+    $('#saveschedule').on('click', function() {
+      var events = calendar.getEvents();
+      var eventData = [];
+      
+      events.forEach(function(event) {
+        var workingStart = event.start.getHours().toString().padStart(2, '0') + event.start.getMinutes().toString().padStart(2, '0');
+        var workingEnd = event.end.getHours().toString().padStart(2, '0') + event.end.getMinutes().toString().padStart(2, '0');
+        var breakStart = null;
+        var breakEnd = null;
+
+        if (event.extendedProps.breakPeriod) {
+          var breakPeriodParts = event.extendedProps.breakPeriod.split('-');
+          breakStart = breakPeriodParts[0];
+          breakEnd = breakPeriodParts[1];
+        }
+
+        var totalWorkingHour = calculateTotalWorkingHour(workingStart, workingEnd, breakStart, breakEnd);
+        var overtime = calculateOvertime(totalWorkingHour);
+
+        event.extendedProps.totalworkinghour = parseFloat(totalWorkingHour).toFixed(1);
+        event.extendedProps.overtime = parseFloat(overtime).toFixed(1);
+
+        var eventObj = {
+          employeeId: parseInt(event.extendedProps.employeeId),
+          workingPeriod: workingStart.padStart(4, '0') + '-' + workingEnd.padStart(4, '0'),
+          breakPeriod: event.extendedProps.breakPeriod ? breakStart + '-' + breakEnd : null,
+          businessDate: event.extendedProps.businessDate,
+          totalWorkingHour: parseFloat(totalWorkingHour),
+          overtime: parseFloat(overtime)
+        };
+
+        eventData.push(eventObj);
+      });
+
+      var jsonData = JSON.stringify(eventData);
+
+      // Save eventData using Ajax
+      $.ajax({
+        url: 'http://localhost:8082/schedule/save-schedule', // Replace with your server-side endpoint to save the data
+        type: 'POST',
+        data: jsonData,
+        headers: {
+          'restaurantId': selectedRestaurantId
+        }, // Convert eventData to JSON
+        contentType: 'application/json', // Set the content type to JSON
+        success: function(response) {
+          console.log('Data saved successfully:', response);
+          $('#myToast').toast('show');
+        },
+        error: function(xhr, status, error) {
+          console.error('Error saving data:', error);
+          $('#myToastfail').toast('show');
+        }
+      });
+
+    });
+
+    $('#deleteschedule').one('click', function() {
+      // show the modal here
+      $('#staticBackdropDeleteSchedule').modal('show');
+      // add click event listener to the "Add" button in the modal
+      $('#DeleteSche').one('click', function() {
+        // Get the list of selected employee IDs
+        var eventsweek = calendar.getEvents();
+        var eventData = [];
+        eventsweek.forEach(function(event) {
+          var employeeId = event.extendedProps.employeeId;
+          var businessDate = event.extendedProps.businessDate;
+          eventData.push({ employeeId: employeeId, businessDate: businessDate });
+        });
+        console.log(eventData)
+        // Make the Ajax request to delete the data from the database
+        $.ajax({
+          url: 'http://localhost:8082/schedule/delete-scheduleweek', // Replace with the actual URL of your server-side script
+          type: 'POST',
+          data: JSON.stringify(eventData), 
+          contentType: 'application/json', // Set the content type to JSON
+          success: function(response) {
+            // Show an alert before reloading the page
+            if (window.confirm('Data deleted successfully!!!')) {
+              $('#staticBackdropDeleteSchedule').modal('hide');
+              getProjectedSalesData(selectedDate, selectedRestaurantId);
+              initializeCalendar(selectedRestaurantId, selectedDate);
+            }
+          },
+          error: function(xhr, status, error) {
+            // Show an alert before reloading the page
+            if (window.confirm('Data deleted failed!!!')) {
+              $('#staticBackdropDeleteSchedule').modal('hide');
+              getProjectedSalesData(selectedDate, selectedRestaurantId);
+              initializeCalendar(selectedRestaurantId, selectedDate);
+            }
+          }
+        });
+      });
+
+    });
+    
+    // Helper function to calculate the total working hours
+    function calculateTotalWorkingHour(start, end, breakStart, breakEnd) {
+      var startHour = parseInt(start.substr(0, 2));
+      var startMinute = parseInt(start.substr(2, 2));
+      var endHour = parseInt(end.substr(0, 2));
+      var endMinute = parseInt(end.substr(2, 2));
+      var breakStartHour = breakStart ? parseInt(breakStart.substr(0, 2)) : 0;
+      var breakStartMinute = breakStart ? parseInt(breakStart.substr(2, 2)) : 0;
+      var breakEndHour = breakEnd ? parseInt(breakEnd.substr(0, 2)) : 0;
+      var breakEndMinute = breakEnd ? parseInt(breakEnd.substr(2, 2)) : 0;
+
+      var workingMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+      var breakMinutes = (breakEndHour * 60 + breakEndMinute) - (breakStartHour * 60 + breakStartMinute);
+      var totalMinutes = workingMinutes - breakMinutes;
+
+      var totalHours = Math.floor(totalMinutes / 60);
+      var minutes = totalMinutes % 60;
+
+      return totalHours + minutes / 60.0;
+    }
+
+    // Helper function to calculate the overtime
+    function calculateOvertime(totalWorkingHour) {
+      if (totalWorkingHour <= 8) {
+        return '0';
+      }
+      var overtimeHours = totalWorkingHour - 8;
+      return overtimeHours.toFixed(1);
+    }
+  }
+  $('#workingPeriodstart, #workingPeriodend, #breakPeriodstart, #breakPeriodend').timepicker({
+    timeFormat: 'HHmm',
+    interval: 30,
+    defaultTime: false,
+    dynamic: false,
+    dropdown: true,
+    scrollbar: true,
+    zindex: 9999999
+  });
+
+  $('#addworkingPeriodstart, #addworkingPeriodend, #addbreakPeriodstart, #addbreakPeriodend').timepicker({
+    timeFormat: 'HHmm',
+    interval: 30,
+    defaultTime: false,
+    dynamic: false,
+    dropdown: true,
+    scrollbar: true,
+    zindex: 9999999
+  });
+  
+  function destroyTimepickers() {
+    $('#workingPeriodstart, #workingPeriodend, #breakPeriodstart, #breakPeriodend').timepicker('destroy');
+    $('#addworkingPeriodstart, #addworkingPeriodend, #addbreakPeriodstart, #addbreakPeriodend').timepicker('destroy');
+  }
+
+  function validateTimepickerInputs() {
+  const startTimepicker = $('#workingPeriodstart');
+  const endTimepicker = $('#workingPeriodend');
+  const breakStartPicker = $('#breakPeriodstart');
+  const breakEndPicker = $('#breakPeriodend');
+
+  // Check if all timepicker inputs exist
+  if (
+    startTimepicker.length === 0 ||
+    endTimepicker.length === 0 ||
+    breakStartPicker.length === 0 ||
+    breakEndPicker.length === 0
+  ) {
+    console.error('One or more timepicker inputs not found.');
+    return;
+  }
+
+  const startTime = startTimepicker.val();
+  const endTime = endTimepicker.val();
+  const breakStart = breakStartPicker.val();
+  const breakEnd = breakEndPicker.val();
+
+  // Check if break start time is greater than break end time
+  if (breakStart && breakEnd && breakStart > breakEnd) {
+    alert('Break start time cannot be greater than break end time');
+    breakStartPicker.val('');
+    breakEndPicker.val('');
+  }
+
+  // Check if break start time is less than or equal to working period start time
+  if (breakStart && startTime && endTime && (breakStart <= startTime || breakStart >= endTime)) {
+    alert('Break start time cannot be less than or equal to working period start time');
+    breakStartPicker.val('');
+  }
+
+  // Check if break end time is greater than or equal to working period end time
+  if (breakEnd && endTime && startTime && (breakEnd >= endTime || breakEnd <= startTime)) {
+    alert('Break end time cannot be greater than or equal to working period end time');
+    breakEndPicker.val('');
+  }
+
+  // Check if working period start time is greater than end time
+  if (startTime && endTime && startTime > endTime) {
+    alert('Working period start time cannot be greater than end time');
+    startTimepicker.val('');
+    endTimepicker.val('');
+  }
+}
+
+function validateTimepickerInputs2() {
+  const startTimepicker = $('#addworkingPeriodstart');
+  const endTimepicker = $('#addworkingPeriodend');
+  const breakStartPicker = $('#addbreakPeriodstart');
+  const breakEndPicker = $('#addbreakPeriodend');
+
+  // Check if all timepicker inputs exist
+  if (
+    startTimepicker.length === 0 ||
+    endTimepicker.length === 0 ||
+    breakStartPicker.length === 0 ||
+    breakEndPicker.length === 0
+  ) {
+    console.error('One or more timepicker inputs not found.');
+    return;
+  }
+
+  const startTime = startTimepicker.val();
+  const endTime = endTimepicker.val();
+  const breakStart = breakStartPicker.val();
+  const breakEnd = breakEndPicker.val();
+
+  // Check if break start time is greater than break end time
+  if (breakStart && breakEnd && breakStart > breakEnd) {
+    alert('Break start time cannot be greater than break end time');
+    breakStartPicker.val('');
+    breakEndPicker.val('');
+  }
+
+  // Check if break start time is less than or equal to working period start time
+  if (breakStart && startTime && endTime && (breakStart <= startTime || breakStart >= endTime)) {
+    alert('Break start time cannot be less than or equal to working period start time');
+    breakStartPicker.val('');
+  }
+
+  // Check if break end time is greater than or equal to working period end time
+  if (breakEnd && endTime && startTime && (breakEnd >= endTime || breakEnd <= startTime)) {
+    alert('Break end time cannot be greater than or equal to working period end time');
+    breakEndPicker.val('');
+  }
+
+  // Check if working period start time is greater than end time
+  if (startTime && endTime && startTime > endTime) {
+    alert('Working period start time cannot be greater than end time');
+    startTimepicker.val('');
+    endTimepicker.val('');
+  }
+}
+
+  function getProjectedSalesData(selectedDate, selectedRestaurantId) {
+    var dates = getWeekDates(selectedDate);
+
+    var startDate = new Date(selectedDate);
+    startDate.setDate(startDate.getDate() - startDate.getDay() + 1); // Set the start date to the previous Monday
+
+    var tableRow = $('#table-container tr:eq(0)'); // Select the table row where the dates will be appended
+
+    // Loop through the days of the week (Monday to Sunday)
+    for (var i = 0; i < 7; i++) {
+      var currentDate = new Date(startDate);
+      currentDate.setDate(currentDate.getDate() + i); // Increment the current date by i days
+
+      // Format the current date as "ddd M/D"
+      var formattedDate = currentDate.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
+
+      // Append the formatted date to the corresponding table cell
+      tableRow.find('th:eq(' + (i + 1) + ')').attr('id', formattedDate).text(formattedDate);
+    }
+
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8082/restaurant/getprojectedsalesdataweek",
+      data: {
+        businessStartDate: dates[0],
+        businessEndDate: dates[1],
+        restaurantId: selectedRestaurantId
+      },
+      // AJAX settings
+      beforeSend: function() {
+        destroyTimepickers();
+      },
+      success: function(response) {
+
+        // Convert response.openTime and response.closeTime to Date objects
+        const openTime = new Date(`2000-01-01T${response.openTime}`);
+        const closeTime = new Date(`2000-01-01T${response.closeTime}`);
+
+        // Subtract 1 hour from openTime and add 1 hour to closeTime
+        openTime.setHours(openTime.getHours() - 1);
+        if (closeTime.getHours() == 23) {
+          closeTime.setHours(23);
+          closeTime.setMinutes(59);
+          closeTime.setSeconds(59);
+          console.log(closeTime)
+        } else {
+          closeTime.setHours(closeTime.getHours() + 1);
+        }
+        
+        res_openTime = openTime.toTimeString().slice(0, 8);
+        res_closeTime = closeTime.toTimeString().slice(0, 8);
+
+        var res_openTimeq = openTime.toTimeString().slice(0, 5).replace(':', '');
+        var res_closeTimeq = closeTime.toTimeString().slice(0, 5).replace(':', '');
+        console.log(res_openTimeq)
+        
+        $('#workingPeriodstart, #workingPeriodend, #breakPeriodstart, #breakPeriodend').timepicker({
+          timeFormat: 'HHmm',
+          interval: 30,
+          defaultTime: false,
+          startTime: res_openTimeq,
+          dynamic: false,
+          dropdown: true,
+          scrollbar: true,
+          zindex: 9999999,
+          minTime: res_openTimeq, // Set the minimum allowed time
+          maxTime: res_closeTimeq ,
+          change: validateTimepickerInputs
+        });
+
+        $('#addworkingPeriodstart, #addworkingPeriodend, #addbreakPeriodstart, #addbreakPeriodend').timepicker({
+          timeFormat: 'HHmm',
+          interval: 30,
+          defaultTime: false,
+          startTime: res_openTimeq,
+          dynamic: false,
+          dropdown: true,
+          scrollbar: true,
+          zindex: 9999999,
+          minTime: res_openTimeq, // Set the minimum allowed time
+          maxTime: res_closeTimeq ,
+          change: validateTimepickerInputs2
+        });
+
+        // Append data to the table
+        var projectsalesweek = response.projectsalesweek;
+        // Update the projected sales values
+        $('#monsales').text(projectsalesweek[0].projectedSales);
+        $('#tuesales').text(projectsalesweek[1].projectedSales);
+        $('#wedsales').text(projectsalesweek[2].projectedSales);
+        $('#thusales').text(projectsalesweek[3].projectedSales);
+        $('#frisales').text(projectsalesweek[4].projectedSales);
+        $('#satsales').text(projectsalesweek[5].projectedSales);
+        $('#sunsales').text(projectsalesweek[6].projectedSales);
+
+        // Update the projected labour hour values
+        $('#monhour').text(projectsalesweek[0].projectedLabourHour);
+        $('#tuehour').text(projectsalesweek[1].projectedLabourHour);
+        $('#wedhour').text(projectsalesweek[2].projectedLabourHour);
+        $('#thuhour').text(projectsalesweek[3].projectedLabourHour);
+        $('#frihour').text(projectsalesweek[4].projectedLabourHour);
+        $('#sathour').text(projectsalesweek[5].projectedLabourHour);
+        $('#sunhour').text(projectsalesweek[6].projectedLabourHour);
+
+        var projectedSPLH = [];
+        for (var i = 0; i < projectsalesweek.length; i++) {
+          projectedSPLH[i] = (projectsalesweek[i].projectedSales / projectsalesweek[i].projectedLabourHour).toFixed(2);
+          if (isNaN(projectedSPLH[i])) {
+            projectedSPLH[i] = 0;
+          }
+        }
+        // Update the projected labour hour values
+        $('#monsplh').text(projectedSPLH[0]);
+        $('#tuesplh').text(projectedSPLH[1]);
+        $('#wedsplh').text(projectedSPLH[2]);
+        $('#thusplh').text(projectedSPLH[3]);
+        $('#frisplh').text(projectedSPLH[4]);
+        $('#satsplh').text(projectedSPLH[5]);
+        $('#sunsplh').text(projectedSPLH[6]);
+
+      },
+      dataType: "json"
+    });
+  }
+
+  
+
+  function getWeekDates(selectedDate) {
+    var startDate = moment(selectedDate).startOf('isoWeek');
+    var startenddates = [];
+    var dates = [];
+
+    for (var i = 0; i < 7; i++) {
+      dates.push(startDate.format('YYYY-MM-DD'));
+      startDate.add(1, 'day');
+    }
+
+    
+    startenddates.push(dates[0]);
+    startenddates.push(dates[6]);
+    return startenddates;
+  }
+
+  $('#printschedule').on('click', function() {
+    window.print();
+  });
+
+});
+
+</script>
+
+</body>
+</html>

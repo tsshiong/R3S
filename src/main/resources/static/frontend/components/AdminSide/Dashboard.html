@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>R3S Dashboard</title>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.0/js.cookie.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Chart.js cdsjs implementation **internet connection** -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+    <style>
+        body {
+            font-size: .875rem;
+        }
+        :root {
+            --colour1: #00B4D8;
+            --colour2: #00313b;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            background: var(--colour1);
+            /* rtl:raw:
+            right: 0;
+            */
+            bottom: 0;
+            /* rtl:remove */
+            left: 0;
+            z-index: 100; /* Behind the navbar */
+            padding: 48px 0 0; /* Height of navbar */
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+        .navbar {
+            justify-content: flex-start;
+        }
+        img {
+                width: 120px;
+                height: 50px;
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+            }
+        @media (max-width: 1000px) {
+            .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+            }
+
+            .active {
+            border-radius: 10px 10px 10px 10px;
+            }
+        }
+
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 48px);
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+        }
+
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .sidebar .nav-link.active {
+            color: #2470dc;
+        }
+
+        .navbar .navbar-toggler {
+            right: 2.75rem;
+        }
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .side1 {
+                width: 17.5%;
+        }
+            .ex {
+            margin-left: 50px;
+            position: absolute;
+            right: 10px;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        ul {
+            list-style-type: none;
+            margin-top: 5px;
+            padding: 0;
+        }
+        li a{
+            color: var(--colour2);
+            padding: 15px;
+            display: flex;
+            margin-left: 1.0rem;
+            font-size: 1.0rem;
+        }
+        ul li a.active {
+            background-color: white;
+            border-radius: 10px 0 0 10px;
+        }
+        .lia1 {
+            margin-right: 1.0rem;
+            line-height: 25px !important;
+        }
+        h1 {
+            left: 0;
+        }
+        .color {
+            color: var(--colour2);
+        }
+        a:link { text-decoration: none; }
+        a:visited { text-decoration: none; }
+        a:hover { text-decoration: none; }
+        a:active { text-decoration: none; }
+        .maincontent {
+             display: flex;
+             align-items: baseline;
+             justify-content: space-between;
+        }
+        .form-group {
+            display: flex;
+            align-items: baseline;
+        }
+        .space {
+            padding-left: 5px;
+        }
+        @media only screen and (max-width: 1000px) {
+
+            .maincontent {
+                display: block;
+            }
+            .form-group {
+                align-items: baseline;
+                justify-content: flex-start !important;
+            }
+
+            #topbar, #midbar, #bottombar {
+                float: none;
+                display: block;
+            }
+        }
+        #topbar {
+            margin:auto;
+            font-family: Sans-serif;
+            color: white;
+            display: inline;
+        }
+
+        #topbar h3 {
+            font-size: 25px;
+            float: left;
+            margin-top: 25px;
+            width: 80%;
+            height: 35px;
+        }
+
+        #topbar img {
+            height: 35px;
+            width: 15%;
+            float: right;
+            margin-top: 10px;
+
+        }
+
+        #topbar p {
+            float: left;
+            margin-top: 5px;
+        }
+
+        #totalactualsales {
+            height: 100px;
+            width: 21%;
+            background-image: linear-gradient(to right, tomato, orange);
+            background-color: tomato;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            float: left;
+            padding: 0px 10px 0px 10px;
+            margin: 20px;
+        }
+
+        #totalactuallabourhours {
+            height: 100px;
+            width: 21%;
+            background-image: linear-gradient(to right, slateblue, dodgerblue);
+            background-color: slateblue;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            float:left;
+            padding: 0px 10px 0px 10px;
+            margin: 20px;
+        }
+
+        #totalovertime {
+            height: 100px;
+            width: 21%;
+            background-image: linear-gradient(to right, lightseagreen, lightgreen);
+            background-color: lightseagreen;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            float: left;
+            padding: 0px 10px 0px 10px;
+            margin: 20px;
+        }
+
+        #averagesplh {
+            height: 100px;
+            width: 21%;
+            background-image: linear-gradient(to right, rebeccapurple, plum);
+            background-color: rebeccapurple;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            float: left;
+            padding: 0px 10px 0px 10px;
+            margin: 20px;
+        }
+
+        #midbar {
+            margin:auto;
+            font-family: Sans-serif;
+            color: dimgrey;
+        }
+
+
+
+        #leftmid {
+            background-color: white;
+            height: 420px;
+            width: 65%;
+            margin: 20px;
+            margin-top: 20px;
+            padding: 0px 15px 0px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            float: left;
+        }
+
+        #rightmid {
+            background-color: white;
+            width: 27%;
+            height: 420px;
+            margin: 20px;
+            margin-top: 20px;
+            padding: 0px 15px 0px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            float: right;
+        }
+
+        #bottombar {
+            margin:auto;
+            font-family: Sans-serif;
+            color: dimgrey;
+        }
+
+        #leftbtm {
+            background-color: white;
+            height: 420px;
+            width: 46%;
+            margin: 20px;
+            margin-top: 20px;
+            padding: 0px 15px 0px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            float: left;
+        }
+
+        #rightbtm {
+            background-color: white;
+            width: 46%;
+            height: 420px;
+            margin: 20px;
+            margin-top: 20px;
+            padding: 0px 15px 0px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            float: right;
+        }
+
+        #rightbtm p {
+            font-size: 15px;
+            margin-left: 10px;
+        }
+        .chart-container {
+            width: 400px;
+            height: 240px;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="navbar navbar-white sticky-top bg-white p-0 shadow align-self-center">
+        <aside class="side1">
+        <a href="Dashboard.html"><img src="../../assets/R3S logo.png" alt="R3S"></a>
+        </aside>
+        <h1>Dashboard</h1>
+        <a href="../Logout.html" class="ex"  id="logoutButton" >
+            <span class="fas fa-sign-out-alt fa-2x color"></span>
+        </a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="fas fa-bars"></span>
+        </button>
+    </header>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-blue sidebar collapse">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="Dashboard.html">
+                <span class="fas fa-chart-line lia1"></span>
+                Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Restaurant.html">
+                <span class="fas fa-utensils lia1"></span>
+                  Restaurant
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Employee.html">
+                <span class="far fa-user lia1"></span>
+                Employee
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="ScheduleDaily.html">
+                <span class="far fa-calendar lia1"></span>
+                Schedule
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Account.html">
+                <span class="far fa-user-circle lia1"></span>
+                Account
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Import.html">
+                <span class="fas fa-file-import lia1"></span>
+                Import
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+  
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="maincontent">
+            <h2 style="white-space: nowrap;">Month to-date Statistics</h2>
+            <div class="form-group float-end">
+                <div class="input-group">
+                    <div id="reportrange" style="white-space: nowrap; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 5px;">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span>
+                    </div>
+                </div>
+                <div class="input-group space" style="flex-wrap: nowrap; ">
+                    <select class="form-control" name="restaurantname" id="selectrestaurant" aria-label="Default select example">
+                        <option value="" selected>All Restaurants</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div id="topbar">
+                <div id="totalactualsales">
+                    <h3 id="total-sales"></h3>
+                    <img src="../../assets/totalsales.png">
+                    <p>Total Actual Sales</p>
+                </div>
+                <div id="totalactuallabourhours">
+                    <h3 id="total-labour-hours"></h3>
+                    <img src="../../assets/labourhours.png">
+                    <p>Total Actual Labour Hours</p>
+                </div>
+                <div id="totalovertime">
+                    <h3 id="total-over-time"></h3>
+                    <img src="../../assets/ot.png">
+                    <p id="total-over-time-p">Total Overtime</p>
+                </div>
+                <div id="averagesplh">
+                    <h3 id="average-splh"></h3>
+                    <img src="../../assets/splh.png">
+                    <p>Average SPLH</p>
+                </div>
+            </div>
+
+            <div id="midbar">
+                <div id="leftmid">
+                    <h3>Actual vs Projected</h3>
+                    <canvas id="actualvsprojected" class="chart-container"></canvas>
+                </div>
+                <div id="rightmid">
+                    <h3>Total Employees</h3>
+                    <canvas id="Piechart"></canvas>
+                </div>
+            </div>
+            <div id="bottombar">
+                <div id="leftbtm">
+                    <h3>Top 5 Sales by Restaurant</h3>
+                    <canvas id="top5res" width="450" height="300"></canvas>
+                </div>
+                <div id="rightbtm">
+                    <h3>Top 5 SPLH by Restaurant</h3>
+                    <canvas id="top5splh" width="450" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+      </main>
+    </div>
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function() {
+    var accountId;
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8082/get-session",
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(response) {
+            accountId = response;
+
+            // Use the retrieved session data as needed
+            console.log('Account ID:', accountId);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Failed to retrieve session data:', errorThrown);
+            window.location.href = '../index1.html';
+        }
+    });
+    
+
+    $('#logoutButton').click(function() {
+        // Send AJAX request to the backend logout endpoint
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8082/logout', // Replace with your actual backend logout endpoint URL
+            xhrFields: {
+                withCredentials: true // Include cookies in the request
+            },
+            success: function(response) {
+                window.location.href = '../Logout.html'; // Redirect to the logout.html page
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle error
+                alert('Logout failed: ' + jqXHR.responseText);
+            }
+        });
+    });
+
+
+    var selectedRestaurantId;
+    var selectedStartDate = moment().startOf('month');
+    var selectedEndDate = moment();
+
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8082/restaurant/all_restaurants",
+        success: function(data) {
+            $.each(data, function(key, value) {
+                $("#selectrestaurant").append("<option value='" + value[0] + "'>" + value[1] + "</option>");
+            });
+
+            // Set the initial selected value
+            selectedRestaurantId = $("#selectrestaurant option:selected").val();
+            
+        },
+        error: function() {
+            console.log("Error");
+        }
+    });
+
+     // Update selectedRestaurantId variable when the selected option changes
+    $("#selectrestaurant").on("change", function() {
+        if ($(this).val() === "") {
+            selectedRestaurantId = ""; // Set to empty when "All Restaurants" is selected
+        } else {
+            selectedRestaurantId = $(this).val();
+        }
+        cb(selectedStartDate, selectedEndDate);
+    });
+
+   
+    
+    function cb(start, end) {
+        
+        // Update the selected start and end dates
+        selectedStartDate = start;
+        selectedEndDate = end;
+
+        // Update the display of the selected date range
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+
+        // Convert the start and end dates to the desired format
+        var startDateStr = start.format("YYYY-MM-DD");
+        var endDateStr = end.format("YYYY-MM-DD");
+
+        //totalactualsales
+        $.ajax({
+            url: "http://localhost:8082/sales/totalactualsales",
+            type: "GET",
+            data: {
+                restaurantId: selectedRestaurantId,
+                startDate: startDateStr,
+                endDate: endDateStr
+            },
+            success: function (data) {
+
+                // Append total sales to H3 element with ID "total-sales"
+                $("#total-sales").text("RM " + data.totalSales.toLocaleString());
+
+                // });
+            },
+            error: function () {
+                alert("Error getting sales data.");
+            },
+        });
+
+        //totalactuallabourhours and totalovertime
+        $.ajax({
+            url: "http://localhost:8082/schedule/totallabourhours",
+            type: "GET",
+            data: {
+                restaurantId: selectedRestaurantId,
+                startDate: startDateStr,
+                endDate: endDateStr
+            },
+            success: function (data) {
+
+                var totalLabourHours = data.totalWorkingHour;
+                $("#total-labour-hours").text(totalLabourHours);
+
+                var totalOvertime = data.totalOvertime;
+                $("#total-over-time").text(totalOvertime);
+
+                // Add mouseover event 
+                $("#total-over-time").mouseover(function() {
+                    var overtimerate = 0;
+                    if (totalLabourHours !== 0 && totalLabourHours !== null && !isNaN(totalLabourHours)) {
+                        overtimerate = (totalOvertime / totalLabourHours) * 100;
+                    }
+                    $(this).text(overtimerate.toFixed(2) + "%");
+                    $("#total-over-time-p").text("Overtime Rate");
+                });
+
+                // Add mouseout event
+                $("#total-over-time").mouseout(function() {
+                    $(this).text(totalOvertime);
+                    $("#total-over-time-p").text("Total Overtime");
+                });
+
+                // Calculate averagesplh
+                var totalSalesText = $("#total-sales").text(); // Get the text value
+                var totalSales = 0;
+                if (totalSalesText) {
+                    totalSales = parseFloat(totalSalesText.replace(/[^0-9.-]+/g, '')); // Remove non-numeric characters and parse as float
+                }
+                console.log(totalLabourHours)
+                console.log(totalSales)
+                var averageSplh = 0;
+                if (totalLabourHours !== 0) {
+                    averageSplh = totalSales / totalLabourHours;
+                }
+
+                // Append averageSplh to the "average-splh" element
+                $("#average-splh").text(averageSplh.toFixed(2));
+
+            },
+            error: function () {
+                alert("Error getting labour data.");
+            },
+        });
+
+        //top 5 sales by restaurants
+        $.ajax({
+            url: "http://localhost:8082/sales/top5restaurants",
+            type: "GET",
+            data: {
+                startDate: startDateStr,
+                endDate: endDateStr
+            },
+            success: function (data) {
+                const ctx = document.getElementById('top5res');
+                const labels = data.restaurantName; // Retrieve labels from the backend response
+                const salesData = data.actualSales; // Retrieve sales data from the backend response
+
+                // Destroy previous chart instance
+                if (window.myChart) {
+                    window.myChart.destroy();
+                }
+
+
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        axis: 'y',
+                        label: 'Actual Sales',
+                        data: salesData,
+                        fill: false,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 1
+                    }]
+                };
+
+                const config = {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        indexAxis: 'y',
+                    }
+                };
+
+                window.myChart = new Chart(ctx, config);
+            },
+            error: function () {
+                alert("Error getting top 5 sales data.");
+            },
+        });
+
+        
+        //projectedsalesvsactualsales
+        $.ajax({
+            url: "http://localhost:8082/sales/actualvsprojected",
+            type: "GET",
+            data: {
+                restaurantId: selectedRestaurantId,
+                startDate: startDateStr,
+                endDate: endDateStr
+            },
+            success: function (data) {
+                const ctx1 = document.getElementById('actualvsprojected');
+                const chartData = {
+                    month: [],
+                    actualSales: [],
+                    projectedSales: [],
+                    projectedLabourHour: [],
+                    actualLabourHour: []
+                };
+
+                const monthNames = [
+                    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                ];
+
+                // Extract data from the response and populate the chartData object
+                data.forEach(item => {
+                    const monthName = monthNames[item.month - 1]; // Subtract 1 to adjust for zero-based indexing
+                    chartData.month.push(monthName);
+                    chartData.actualSales.push(item.actualSales);
+                    chartData.projectedSales.push(item.projectedSales);
+                    chartData.projectedLabourHour.push(item.projectedLabourHour);
+                    chartData.actualLabourHour.push(item.actualLabourHour);
+                });
+
+                // Destroy previous chart instance
+                if (window.myChart1) {
+                    window.myChart1.destroy();
+                }
+
+                const chdata = {
+                labels: chartData.month,
+                datasets: [{
+                    type: 'bar',
+                    label: 'Actual Sales',
+                    data: chartData.actualSales,
+                    borderColor: 'rgb(255, 205, 86)',
+                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                    borderWidth: 1
+                    
+                }, {
+                    type: 'bar',
+                    label: 'Projected Sales',
+                    data: chartData.projectedSales,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 1
+                },{
+                    type: 'line',
+                    label: 'Actual Labour Hours',
+                    data: chartData.actualLabourHour,
+                    fill: false,
+                    borderColor: 'rgb(255, 99, 132)',
+                    yAxisID: 'y1'
+                },{
+                    type: 'line',
+                    label: 'Projected Labour Hours',
+                    data: chartData.projectedLabourHour,
+                    fill: false,
+                    borderColor: 'rgb(54, 162, 235)',
+                    yAxisID: 'y1'
+                }]
+                };
+                const config1 = {
+                type: 'scatter',
+                data: chdata,
+                options: {
+                    scales: {
+                    y: {
+                        grid: {
+                        display: false, // Remove y-axis grid lines
+                        },
+                        beginAtZero: true,
+                        title: {
+                        display: true,
+                        text: 'Sales(RM)'
+                        }
+                    },
+                    y1: {
+                        grid: {
+                        display: false, // Remove y-axis grid lines
+                        },
+                        beginAtZero: true,
+                        position: 'right',
+                        title: {
+                        display: true,
+                        text: 'Labour Hours'
+                        }
+                    }
+                    }
+                }
+                };
+                window.myChart1 = new Chart(ctx1, config1);
+            },
+            error: function () {
+                alert("Error getting actual or projected sales data.");
+            },
+        });
+
+        //total employee 
+        $.ajax({
+            url: "http://localhost:8082/employee/totalemployee",
+            type: "GET",
+            data: {
+                restaurantId: selectedRestaurantId
+            },
+            success: function (data) {
+                const ctx2 = document.getElementById('Piechart');
+
+                // Destroy previous chart instance
+                if (window.myChart2) {
+                    window.myChart2.destroy();
+                }
+
+                const totalEmployee = data;
+                const fullTimeCount = totalEmployee[0];
+                const partTimeCount = totalEmployee[1];
+                const totalCount = fullTimeCount + partTimeCount;
+
+                const fullTimePercentage = ((fullTimeCount / totalCount) * 100).toFixed(2);
+                const partTimePercentage = ((partTimeCount / totalCount) * 100).toFixed(2);
+                
+                const data2 = {
+                labels: [
+                    'Full Time',
+                    'Part Time'
+                ],
+                datasets: [{
+                    label: 'pie',
+                    data: [fullTimeCount, partTimeCount],
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)'
+                    ],
+                    hoverOffset: 4
+                }]
+                };
+                const config2 = {
+                type: 'pie',
+                data: data2,
+                options: {
+                    plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                    }
+                },
+                
+                };
+                window.myChart2 = new Chart(ctx2, config2);
+            },
+            error: function () {
+                alert("Error getting total employees data.");
+            },
+        });
+
+        //top 5 splh by restaurants
+        $.ajax({
+            url: "http://localhost:8082/sales/top5splhrestaurants",
+            type: "GET",
+            data: {
+                startDate: startDateStr,
+                endDate: endDateStr
+            },
+            success: function (data) {
+                const ctx3 = document.getElementById('top5splh');
+                const labels = data.restaurantName; 
+                const splh = data.splh;
+
+                // Destroy previous chart instance
+                if (window.myChart3) {
+                    window.myChart3.destroy();
+                }
+
+
+                const chartData1 = {
+                    labels: labels,
+                    datasets: [{
+                        axis: 'y',
+                        label: 'Sales Per Labor Hour (SPLH)',
+                        data: splh,
+                        fill: false,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 1
+                    }]
+                };
+
+                const config3 = {
+                    type: 'bar',
+                    data: chartData1,
+                    options: {
+                        indexAxis: 'y',
+                    }
+                };
+
+                window.myChart3 = new Chart(ctx3, config3);
+            },
+            error: function () {
+                alert("Error getting top 5 splh data.");
+            },
+        });
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: selectedStartDate,
+        endDate: selectedEndDate,
+        ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(selectedStartDate, selectedEndDate);
+
+});
+
+</script>
+</body>
+</html>
